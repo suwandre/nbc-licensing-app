@@ -24,7 +24,7 @@
     "@mantine/prism": "^5.10.3",
     "@mantine/spotlight": "^5.10.3",
     "@mantine/tiptap": "^5.10.3",
-    "@moralisweb3/next": "^2.18.1",
+    "@moralisweb3/next": "^2.23.2",
     "@next/font": "14.0.3",
     "@tabler/icons": "^1.119.0",
     "@tiptap/extension-link": "^2.0.0-beta.217",
