@@ -1,0 +1,71 @@
+import { RequestChallengeEvmRequestClient } from '@moralisweb3/next';
+import { ConnectArgs, ConnectResult, PublicClient, SignMessageArgs } from '@wagmi/core';
+import { BuiltInProviderType } from 'next-auth/providers';
+import { LiteralUnion, SignInAuthorizationParams, SignInOptions } from 'next-auth/react';
+import { Dispatch, SetStateAction } from 'react';
+import { MutateOptions } from 'react-query';
+import { InjectedConnector } from '@wagmi/core/connectors';
+
+/**
+ * Connects to an injected Web3 provider, requests and signs a challenge, 
+ * and signs the user in via `next-auth/react`, providing a session token.
+ */
+export const web3Auth = async (
+    /** `isConnected` from wagmi's `useAccount()` hook. */
+    isConnected: boolean,
+    /** `setIsAuthenticated` from AuthContext component. */
+    setIsAuthenticated: Dispatch<SetStateAction<boolean>>,
+    connectAsync: (args?: Partial<ConnectArgs> | undefined) => Promise<ConnectResult<PublicClient>>,
+    disconnectAsync: (variables: void, options?: MutateOptions<void, Error, void, unknown> | undefined) => Promise<void>,
+    // request challenge currently only supports EVM clients; we will branch this out in the future.
+    requestChallengeAsync: (params?: RequestChallengeEvmRequestClient | undefined) => Promise<{
+        id: string;
+        profileId: string;
+        message: string;
+    } | undefined>,
+    signMessageAsync: (args?: SignMessageArgs | undefined) => Promise<`0x${string}`>,
+    signIn: (provider?: LiteralUnion<BuiltInProviderType> | undefined, options?: SignInOptions | undefined, authorizationParams?: SignInAuthorizationParams | undefined) => Promise<any>
+): Promise<void> => {
+    // disconnects first if already connected, just to be safe.
+    if (isConnected) await disconnectAsync();
+
+    const { account, chain } = await connectAsync({
+        connector: new InjectedConnector()
+    });
+
+    // for some reason, `const { messsage }` doesn't work here, so we don't destructure the result first.
+    const requestResult = await requestChallengeAsync({
+        address: account,
+        chainId: chain.id
+    }).catch((err) => {
+        console.error(err);
+
+        return;
+    });
+
+    const message = requestResult?.message ?? '';
+
+    const signature = await signMessageAsync({message}).then(sig => {
+        const userData = { address: account, chainId: chain.id };
+
+        console.log('user data: ', userData);
+        console.log('signature: ', sig);
+
+        const signinData = signIn('moralis-auth', {
+            message,
+            signature: sig,
+            redirect: false,
+            callbackUrl: '/',
+        }).then(data => {
+            setIsAuthenticated(true);
+
+            console.log('signin data: ', data);
+        }).catch((err) => {
+            console.log('error signing in: ', err);
+            return;
+        });
+    }).catch((err) => {
+        console.log('error signing message: ', err);
+        return;
+    })
+}

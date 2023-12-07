@@ -12,6 +12,7 @@ export default function Home({user}: HomeProps) {
       <Layout
         pageTitle='Licensing'
       >
+        
       </Layout>
     </>
   )

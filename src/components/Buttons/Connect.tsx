@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useContext } from 'react';
 import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
 import AuthContext from '../Auth/AuthContext';
+import { web3Auth } from '@/utils/web3Auth';
 
 const useStyles = createStyles((theme) => ({
     connectButton: {
@@ -34,48 +35,60 @@ export const ConnectButton = () => {
     const { setIsAuthenticated } = useContext(AuthContext);
 
     const handleAuth = async () => {
-        if (isConnected) {
-            await disconnectAsync();
-        }
-        const { account, chain } = await connectAsync({
-            connector: new InjectedConnector()
-        });
-
-        // for some reason, `const { message }` doesn't work, so we don't destructure the result.
-        const requestResult = await requestChallengeAsync({
-            address: account,
-            chainId: chain.id,
-        }).catch((err) => {
-            console.log('error requesting challenge: ', err);
-            return;
-        });
-
-        const message = requestResult?.message ?? '';
-
-        const signature = await signMessageAsync({ message }).then(sig => {
-            const userData = { address: account, chainId: chain.id };
-
-            console.log('user data: ', userData);
-            console.log('signature: ', sig);
-
-            const signinData = signIn('moralis-auth', {
-                message,
-                signature: sig,
-                redirect: false,
-                callbackUrl: '/',
-            }).then(data => {
-                setIsAuthenticated(true);
-
-                console.log('signin data: ', data);
-            }).catch((err) => {
-                console.log('error signing in: ', err);
-                return;
-            });
-        }).catch((err) => {
-            console.log('error signing message: ', err);
-            return;
-        })
+        await web3Auth(
+            isConnected,
+            setIsAuthenticated,
+            connectAsync,
+            disconnectAsync,
+            requestChallengeAsync,
+            signMessageAsync,
+            signIn,
+        );
     }
+
+    // const handleAuth = async () => {
+    //     if (isConnected) {
+    //         await disconnectAsync();
+    //     }
+    //     const { account, chain } = await connectAsync({
+    //         connector: new InjectedConnector()
+    //     });
+
+    //     // for some reason, `const { message }` doesn't work, so we don't destructure the result.
+    //     const requestResult = await requestChallengeAsync({
+    //         address: account,
+    //         chainId: chain.id,
+    //     }).catch((err) => {
+    //         console.log('error requesting challenge: ', err);
+    //         return;
+    //     });
+
+    //     const message = requestResult?.message ?? '';
+
+    //     const signature = await signMessageAsync({ message }).then(sig => {
+    //         const userData = { address: account, chainId: chain.id };
+
+    //         console.log('user data: ', userData);
+    //         console.log('signature: ', sig);
+
+    //         const signinData = signIn('moralis-auth', {
+    //             message,
+    //             signature: sig,
+    //             redirect: false,
+    //             callbackUrl: '/',
+    //         }).then(data => {
+    //             setIsAuthenticated(true);
+
+    //             console.log('signin data: ', data);
+    //         }).catch((err) => {
+    //             console.log('error signing in: ', err);
+    //             return;
+    //         });
+    //     }).catch((err) => {
+    //         console.log('error signing message: ', err);
+    //         return;
+    //     })
+    // }
 
     return (
         <Button
