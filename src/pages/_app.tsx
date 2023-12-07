@@ -7,14 +7,22 @@ import { createConfig, configureChains, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { SessionProvider } from "next-auth/react";
 import { bscTestnet, bsc, mainnet, sepolia } from "wagmi/chains";
+import { InjectedConnector } from '@wagmi/core/connectors/injected';
 
-const { publicClient, webSocketPublicClient } = configureChains(
+const { publicClient, webSocketPublicClient, chains } = configureChains(
   // main chain will still be bsc testnet until licensing smart contract is ready for deployment on mainnets.
   [bscTestnet, bsc, mainnet, sepolia],
   [publicProvider()]
 );
 
 const config = createConfig({
+  connectors: [
+    new InjectedConnector({
+      options: {
+        shimDisconnect: false,
+      }
+    }),
+  ],
   autoConnect: true,
   publicClient,
   webSocketPublicClient,
@@ -23,7 +31,7 @@ const config = createConfig({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig config={config}>
-      <SessionProvider session={pageProps.session} refetchInterval={0}>
+      <SessionProvider session={pageProps.session} refetchInterval={60}>
         <MantineProvider
           withGlobalStyles
           withNormalizeCSS
