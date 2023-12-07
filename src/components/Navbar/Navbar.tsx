@@ -21,8 +21,8 @@ import { InjectedConnector } from "@wagmi/core/connectors/injected";
 import { ConnectButton } from "../Buttons/Connect";
 import { DisconnectButton } from "../Buttons/Disconnect";
 import { IconBox, IconChevronDown, IconLayoutDashboard, IconLogout, IconMoneybag, IconPool, IconReceipt, IconUser } from "@tabler/icons";
-import { getSession } from "next-auth/react";
-import { useAccount } from "wagmi";
+import { getSession, signOut } from "next-auth/react";
+import { useAccount, useDisconnect } from "wagmi";
 import { useEffect, useState } from "react";
 
 const HEADER_HEIGHT = 60;
@@ -149,10 +149,21 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-// when user is authenticated, this is the menu that will be displayed
+// when user is authenticated, this is the account menu that will be displayed
 const AuthenticatedAccountMenu = () => {
   const { classes } = useStyles();
   const router = useRouter();
+
+  const { disconnectAsync } = useDisconnect();
+
+  const handleLogout = async () => {
+    // disconnects from WAGMI
+    await disconnectAsync();
+    // disconnects from next-auth, removing the session cookie
+    await signOut();
+
+    router.replace('/');
+  }
 
   return (
     <>
@@ -190,7 +201,7 @@ const AuthenticatedAccountMenu = () => {
             <Text>Redeem Code</Text>
           </Menu.Item>
           <Divider />
-          <Menu.Item onClick={() => console.log('logging out')} icon={<IconLogout size={14} />}>
+          <Menu.Item onClick={handleLogout} icon={<IconLogout size={14} />}>
             Logout
           </Menu.Item>
         </Menu.Dropdown>
@@ -203,7 +214,7 @@ const NavbarMenu = (props: any) => {
   const enableDropdown = props.isDropdown;
   const { classes } = useStyles();
   const router = useRouter();
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -212,12 +223,16 @@ const NavbarMenu = (props: any) => {
       const session = await getSession();
 
       if (session) {
+        console.log('session: ', session);
         setIsAuthenticated(true);
+      } else {
+        // default set to false just in case `isAuthenticated` is stuck at true even when there is no session.
+        setIsAuthenticated(false);
       }
     };
 
     sessionData();
-  }, [isConnected]);
+  }, [isConnected, address]);
 
   return (
     <>
@@ -261,7 +276,7 @@ const NavbarMenu = (props: any) => {
       </Center>
       <Center className={classes.centerItems}>
         {!isAuthenticated ? (
-          <ConnectButton />
+          <ConnectButton setIsAuthenticated={setIsAuthenticated} />
         ) : (
           <AuthenticatedAccountMenu />
         )}

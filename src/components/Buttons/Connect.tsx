@@ -3,6 +3,7 @@ import { useAuthRequestChallengeEvm } from '@moralisweb3/next';
 import { InjectedConnector } from '@wagmi/core/connectors';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { Dispatch, SetStateAction } from 'react';
 import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
 
 const useStyles = createStyles((theme) => ({
@@ -20,7 +21,11 @@ const useStyles = createStyles((theme) => ({
       }
 }))
 
-export const ConnectButton = () => {
+type ConnectButtonProps = {
+    setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
+}
+
+export const ConnectButton = ({setIsAuthenticated}: ConnectButtonProps) => {
     const { connectAsync } = useConnect();
     const { signMessageAsync } = useSignMessage();
     // we currently only support EVM chains.
@@ -41,25 +46,36 @@ export const ConnectButton = () => {
         const requestResult = await requestChallengeAsync({
             address: account,
             chainId: chain.id,
-          });
+        }).catch((err) => {
+            console.log('error requesting challenge: ', err);
+            return;
+        });
 
         const message = requestResult?.message ?? '';
 
-        const signature = await signMessageAsync({ message });
+        const signature = await signMessageAsync({ message }).then(sig => {
+            const userData = { address: account, chainId: chain.id };
 
-        const userData = { address: account, chainId: chain.id };
+            console.log('user data: ', userData);
+            console.log('signature: ', sig);
 
-        console.log('user data: ', userData);
-        console.log('signature: ', signature);
+            const signinData = signIn('moralis-auth', {
+                message,
+                signature: sig,
+                redirect: false,
+                callbackUrl: '/',
+            }).then(data => {
+                setIsAuthenticated(true);
 
-        const signinData = await signIn('moralis-auth', {
-            message,
-            signature,
-            redirect: false,
-            callbackUrl: '/',
-        });
-
-        console.log('signin data: ', signinData);
+                console.log('signin data: ', data);
+            }).catch((err) => {
+                console.log('error signing in: ', err);
+                return;
+            });
+        }).catch((err) => {
+            console.log('error signing message: ', err);
+            return;
+        })
     }
 
     return (

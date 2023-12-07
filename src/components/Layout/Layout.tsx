@@ -18,7 +18,7 @@ export const Layout = ({
     keywords = 'nbc, ip, web3, franchise, realm hunter, multiplayer game, nft gaming, nft, licensing'
 }: LayoutProps): JSX.Element => {
     const [loading, setLoading] = useState(true);
-    // checks if user is authenticated !!VIA WALLET!! (not email).
+    // checks if user is connected via an injected connector.
     const { isConnected } = useAccount();
 
     const title = !!pageTitle ? `${pageTitle} | Not Boring Company` : 'Not Boring Company';
