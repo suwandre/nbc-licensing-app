@@ -45,51 +45,7 @@ export const ConnectButton = () => {
             signIn,
         );
     }
-
-    // const handleAuth = async () => {
-    //     if (isConnected) {
-    //         await disconnectAsync();
-    //     }
-    //     const { account, chain } = await connectAsync({
-    //         connector: new InjectedConnector()
-    //     });
-
-    //     // for some reason, `const { message }` doesn't work, so we don't destructure the result.
-    //     const requestResult = await requestChallengeAsync({
-    //         address: account,
-    //         chainId: chain.id,
-    //     }).catch((err) => {
-    //         console.log('error requesting challenge: ', err);
-    //         return;
-    //     });
-
-    //     const message = requestResult?.message ?? '';
-
-    //     const signature = await signMessageAsync({ message }).then(sig => {
-    //         const userData = { address: account, chainId: chain.id };
-
-    //         console.log('user data: ', userData);
-    //         console.log('signature: ', sig);
-
-    //         const signinData = signIn('moralis-auth', {
-    //             message,
-    //             signature: sig,
-    //             redirect: false,
-    //             callbackUrl: '/',
-    //         }).then(data => {
-    //             setIsAuthenticated(true);
-
-    //             console.log('signin data: ', data);
-    //         }).catch((err) => {
-    //             console.log('error signing in: ', err);
-    //             return;
-    //         });
-    //     }).catch((err) => {
-    //         console.log('error signing message: ', err);
-    //         return;
-    //     })
-    // }
-
+    
     return (
         <Button
             className={classes.connectButton}

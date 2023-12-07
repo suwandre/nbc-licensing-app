@@ -1,3 +1,4 @@
+import { web3Disconnect } from '@/utils/web3Auth';
 import { Button, createStyles } from '@mantine/core';
 import { signOut } from 'next-auth/react';
 import { useDisconnect } from 'wagmi';
@@ -22,12 +23,7 @@ export const DisconnectButton = () => {
     const { classes } = useStyles();
 
     const handleDisconnect = async () => {
-        await disconnectAsync();
-
-        await signOut({
-            callbackUrl: '/',
-        });
-
+        await web3Disconnect(disconnectAsync, signOut);
         window.location.reload();
     }
 

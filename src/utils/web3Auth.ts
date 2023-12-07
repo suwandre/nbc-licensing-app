@@ -1,14 +1,14 @@
 import { RequestChallengeEvmRequestClient } from '@moralisweb3/next';
 import { ConnectArgs, ConnectResult, PublicClient, SignMessageArgs } from '@wagmi/core';
 import { BuiltInProviderType } from 'next-auth/providers';
-import { LiteralUnion, SignInAuthorizationParams, SignInOptions } from 'next-auth/react';
+import { LiteralUnion, SignInAuthorizationParams, SignInOptions, SignOutParams } from 'next-auth/react';
 import { Dispatch, SetStateAction } from 'react';
 import { MutateOptions } from 'react-query';
 import { InjectedConnector } from '@wagmi/core/connectors';
 
 /**
  * Connects to an injected Web3 provider, requests and signs a challenge, 
- * and signs the user in via `next-auth/react`, providing a session token.
+ * and signs the user in via `next-auth/react`'s `signIn`, providing a session token.
  */
 export const web3Auth = async (
     /** `isConnected` from wagmi's `useAccount()` hook. */
@@ -68,4 +68,24 @@ export const web3Auth = async (
         console.log('error signing message: ', err);
         return;
     })
+}
+
+/**
+ * Disconnects from the current Web3 provider and signs the user out via `next-auth/react`'s `signOut`, removing their session.
+ */
+export const web3Disconnect = async (
+    disconnectAsync: (variables: void, options?: MutateOptions<void, Error, void, unknown> | undefined) => Promise<void>,
+    signOut: (options?: SignOutParams<true> | undefined) => Promise<undefined>
+) => {
+    await disconnectAsync().catch((err) => {
+        console.error(err);
+        return;
+    });
+
+    await signOut({
+        callbackUrl: '/'
+    }).catch((err) => {
+        console.error(err);
+        return;
+    });
 }

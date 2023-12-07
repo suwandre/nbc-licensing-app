@@ -6,13 +6,17 @@ type HomeProps = {
   user: DefaultSession['user'];
 }
 
+const createAccount = () => {
+  
+}
+
 export default function Home({user}: HomeProps) {
   return (
     <>
       <Layout
         pageTitle='Licensing'
       >
-        
+
       </Layout>
     </>
   )
