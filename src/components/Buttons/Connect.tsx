@@ -3,8 +3,9 @@ import { useAuthRequestChallengeEvm } from '@moralisweb3/next';
 import { InjectedConnector } from '@wagmi/core/connectors';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useContext } from 'react';
 import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
+import AuthContext from '../Auth/AuthContext';
 
 const useStyles = createStyles((theme) => ({
     connectButton: {
@@ -21,11 +22,7 @@ const useStyles = createStyles((theme) => ({
       }
 }))
 
-type ConnectButtonProps = {
-    setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
-}
-
-export const ConnectButton = ({setIsAuthenticated}: ConnectButtonProps) => {
+export const ConnectButton = () => {
     const { connectAsync } = useConnect();
     const { signMessageAsync } = useSignMessage();
     // we currently only support EVM chains.
@@ -33,6 +30,8 @@ export const ConnectButton = ({setIsAuthenticated}: ConnectButtonProps) => {
     const { classes } = useStyles();
     const { isConnected } = useAccount();
     const { disconnectAsync } = useDisconnect();
+
+    const { setIsAuthenticated } = useContext(AuthContext);
 
     const handleAuth = async () => {
         if (isConnected) {

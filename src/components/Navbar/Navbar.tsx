@@ -23,7 +23,8 @@ import { DisconnectButton } from "../Buttons/Disconnect";
 import { IconBox, IconChevronDown, IconLayoutDashboard, IconLogout, IconMoneybag, IconPool, IconReceipt, IconUser } from "@tabler/icons";
 import { getSession, signOut } from "next-auth/react";
 import { useAccount, useDisconnect } from "wagmi";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import AuthContext from "../Auth/AuthContext";
 
 const HEADER_HEIGHT = 60;
 
@@ -216,7 +217,7 @@ const NavbarMenu = (props: any) => {
   const router = useRouter();
   const { isConnected, address } = useAccount();
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
     const sessionData = async () => {
@@ -232,7 +233,7 @@ const NavbarMenu = (props: any) => {
     };
 
     sessionData();
-  }, [isConnected, address]);
+  }, [isConnected, address, setIsAuthenticated]);
 
   return (
     <>
@@ -276,7 +277,7 @@ const NavbarMenu = (props: any) => {
       </Center>
       <Center className={classes.centerItems}>
         {!isAuthenticated ? (
-          <ConnectButton setIsAuthenticated={setIsAuthenticated} />
+          <ConnectButton />
         ) : (
           <AuthenticatedAccountMenu />
         )}
