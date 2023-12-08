@@ -15,6 +15,10 @@ export const web3Auth = async (
     isConnected: boolean,
     /** `setIsAuthenticated` from AuthContext component. */
     setIsAuthenticated: Dispatch<SetStateAction<boolean>>,
+    /** `setIsSigningMessage` from AuthContext component. */
+    setIsSigningMessage: Dispatch<SetStateAction<boolean>>,
+    // /** `setSessionData` from AuthContext component. */
+    // setSessionData: Dispatch<SetStateAction<CustomSessionType|null>>,
     connectAsync: (args?: Partial<ConnectArgs> | undefined) => Promise<ConnectResult<PublicClient>>,
     disconnectAsync: (variables: void, options?: MutateOptions<void, Error, void, unknown> | undefined) => Promise<void>,
     // request challenge currently only supports EVM clients; we will branch this out in the future.
@@ -45,13 +49,15 @@ export const web3Auth = async (
 
     const message = requestResult?.message ?? '';
 
-    const signature = await signMessageAsync({message}).then(sig => {
+    setIsSigningMessage(true);
+
+    const signature = await signMessageAsync({message}).then(async sig => {
         const userData = { address: account, chainId: chain.id };
 
         console.log('user data: ', userData);
         console.log('signature: ', sig);
 
-        const signinData = signIn('moralis-auth', {
+        await signIn('moralis-auth', {
             message,
             signature: sig,
             redirect: false,
@@ -62,12 +68,12 @@ export const web3Auth = async (
             console.log('signin data: ', data);
         }).catch((err) => {
             console.log('error signing in: ', err);
-            return;
         });
     }).catch((err) => {
         console.log('error signing message: ', err);
-        return;
-    })
+    });
+
+    setIsSigningMessage(false);
 }
 
 /**

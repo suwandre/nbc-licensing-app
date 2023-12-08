@@ -32,12 +32,13 @@ export const ConnectButton = () => {
     const { isConnected } = useAccount();
     const { disconnectAsync } = useDisconnect();
 
-    const { setIsAuthenticated } = useContext(AuthContext);
+    const { setIsAuthenticated, setIsSigningMessage } = useContext(AuthContext);
 
     const handleAuth = async () => {
         await web3Auth(
             isConnected,
             setIsAuthenticated,
+            setIsSigningMessage,
             connectAsync,
             disconnectAsync,
             requestChallengeAsync,
@@ -45,7 +46,7 @@ export const ConnectButton = () => {
             signIn,
         );
     }
-    
+
     return (
         <Button
             className={classes.connectButton}

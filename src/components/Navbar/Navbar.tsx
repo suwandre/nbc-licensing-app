@@ -215,25 +215,8 @@ const NavbarMenu = (props: any) => {
   const enableDropdown = props.isDropdown;
   const { classes } = useStyles();
   const router = useRouter();
-  const { isConnected, address } = useAccount();
 
-  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
-
-  useEffect(() => {
-    const sessionData = async () => {
-      const session = await getSession();
-
-      if (session) {
-        console.log('session: ', session);
-        setIsAuthenticated(true);
-      } else {
-        // default set to false just in case `isAuthenticated` is stuck at true even when there is no session.
-        setIsAuthenticated(false);
-      }
-    };
-
-    sessionData();
-  }, [isConnected, address, setIsAuthenticated]);
+  const { isAuthenticated } = useContext(AuthContext);
 
   return (
     <>
