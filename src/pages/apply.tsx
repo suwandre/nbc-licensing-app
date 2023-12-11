@@ -1,4 +1,10 @@
 import { Layout } from '@/components/Layout/Layout';
+import { LicenseApplicationStepsBox } from '@/components/Licensing/application/StepsBox';
+import { LiceseeAccountApproval } from '@/components/Licensing/application/steps/AccountApproval';
+import { KYCVerification } from '@/components/Licensing/application/steps/KYCVerification';
+import { LicenseApplication } from '@/components/Licensing/application/steps/LicenseApplication';
+import { RegisterLicenseeAccount } from '@/components/Licensing/application/steps/RegisterAccount';
+import { ViewApplications } from '@/components/Licensing/application/steps/ViewApplications';
 import { Badge, Box, Button, Center, Flex, Text, Title, Tooltip } from '@mantine/core';
 import { IconBrandTwitter } from '@tabler/icons';
 
@@ -40,65 +46,11 @@ const Apply = () => {
                     From borrowing assets to creating your own within our ecosystem,
                     <br />apply for an NBC license now!
                 </Text>
-                <Box
-                    style={{ border: '2px solid white' }}
-                    sx={(theme) => ({
-                        marginTop: 45,
-                        borderRadius: theme.radius.md,
-                        width: '75%',
-                        textAlign: 'center',
-                        // marginBottom: getMarginBottom,
-                        // marginTop: getMarginTop,
-                    })}
-                >
-                    <Flex
-                        direction='row'
-                        align='center'
-                        justify='space-between'
-                        sx={(theme) => ({
-                            marginLeft: 15,
-                        })}
-                    >
-                        <Flex
-                            direction='row'
-                            align='center'
-                        >
-                            <IconBrandTwitter size={35} />
-                            <Text
-                                color={'white'}
-                                sx={(theme) => ({
-                                    margin: '20px 10px 20px 25px',
-                                    fontSize: 20,
-                                    fontWeight: 500,
-
-                                    [theme.fn.smallerThan('sm')]: {
-                                        fontSize: 14,
-                                        margin: '20px 5px 20px 5px',
-                                    }
-                                })}
-                            >
-                                Register for a licensee account
-                            </Text>
-                        </Flex>
-                        <Button
-                            sx={(theme) => ({
-                                backgroundColor: '#42ca9f',
-                                marginRight: 25,
-                                ':hover': {
-                                    transform: 'scale(1.01) translate(1px, -3px)',
-                                    transitionDuration: '200ms',
-                                    backgroundColor: '#42ca9f',
-                                },
-                
-                                [theme.fn.smallerThan('sm')]: {
-                                    fontSize: 10,
-                                }
-                            })}
-                        >
-                            Register
-                        </Button>
-                    </Flex>
-                </Box>
+                <RegisterLicenseeAccount />
+                <LiceseeAccountApproval />
+                <KYCVerification />
+                <LicenseApplication />
+                <ViewApplications />
             </Flex>
         </Layout>
     );

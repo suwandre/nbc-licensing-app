@@ -229,7 +229,7 @@ const NavbarMenu = (props: any) => {
               icon={<IconPool size={14} />}
               onClick={() => router.replace("/test2")}
             >
-              Test 2
+              My Applications
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
