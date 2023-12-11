@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }: any) => {
     const [sessionData, setSessionData] = useState(null) as [CustomSessionType | null, Dispatch<SetStateAction<CustomSessionType | null>>];
     // whether the user is currently signing a message on their wallet provider.
     const [isSigningMessage, setIsSigningMessage] = useState(false);
+
     const { isConnected, address, connector: activeConnector } = useAccount();
     const { connectAsync } = useConnect();
     const { disconnectAsync } = useDisconnect();
@@ -49,6 +50,7 @@ export const AuthProvider = ({ children }: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeConnector]);
 
+    // change session data just in case account changes or user disconnects.
     useEffect(() => {
         const sessionData = async () => {
           const session = await getSession() as CustomSessionType | null;
@@ -62,9 +64,19 @@ export const AuthProvider = ({ children }: any) => {
             setIsAuthenticated(false);
           }
         };
+
+        // if user hasn't connected their wallet, sometimes the leftover session data will still be there.
+        // in this case, we sign them out of their session.
+        const checkNotConnectedButAuthenticated = async () => {
+            if (!isConnected && isAuthenticated) {
+                console.log('connected but not authenticated');
+                await signOut();
+            }
+        }
     
         sessionData();
-      }, [isConnected, address, isSigningMessage, activeConnector]);
+        checkNotConnectedButAuthenticated();
+      }, [isConnected, address, isSigningMessage, activeConnector, isAuthenticated]);
 
     return (
         <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated, sessionData, setSessionData, isSigningMessage, setIsSigningMessage}}>

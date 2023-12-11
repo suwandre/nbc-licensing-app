@@ -189,18 +189,6 @@ const AuthenticatedAccountMenu = () => {
           >
             <Text>Account Settings</Text>
           </Menu.Item>
-          <Menu.Item
-            onClick={() => router.push('/account/inventory')}
-            icon={<IconBox size={14} />}
-          >
-            <Text>Inventory</Text>
-          </Menu.Item>
-          <Menu.Item
-            onClick={() => router.push('/account/redeem-code')}
-            icon={<IconReceipt size={14} />}
-          >
-            <Text>Redeem Code</Text>
-          </Menu.Item>
           <Divider />
           <Menu.Item onClick={handleLogout} icon={<IconLogout size={14} />}>
             Logout
@@ -231,15 +219,15 @@ const NavbarMenu = (props: any) => {
 
           <Menu.Dropdown className={classes.menuDropdown}>
             <Menu.Item
-              onClick={() => router.push("/licensing")}
+              onClick={() => router.push("/apply")}
               icon={<IconMoneybag size={14} />}
             >
-              <Text>Test</Text>
+              <Text>Apply</Text>
             </Menu.Item>
             <Divider />
             <Menu.Item
               icon={<IconPool size={14} />}
-              onClick={() => router.replace("/licensing/test2")}
+              onClick={() => router.replace("/test2")}
             >
               Test 2
             </Menu.Item>

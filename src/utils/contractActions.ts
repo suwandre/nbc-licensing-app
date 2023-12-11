@@ -11,10 +11,32 @@ const LICENSE_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_LICENSE_CONTRACT_ADDRES
 export const useDynamicPrepareContractWrite = (
     functionName: string,
     account: `0x${string}` | Account | undefined,
-    args: readonly unknown[] | undefined
+    args: readonly unknown[] | undefined,
+    value: bigint | undefined
 ) => {
     const { config } = usePrepareContractWrite({
-        address: '0x9A947b7d642e79A50313e5f9c9551dF6d4463261',
+        address: '0x45eb0bCa5e5dDA84DF9549053A8cC3407E77D1BE',
+        account,
+        abi: licenseABI,
+        functionName,
+        args,
+        value,
+        chainId: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '1')
+    });
+
+    return config;
+}
+
+/**
+ * Initializes a contract read hook for the License contract.
+ */
+export const useDynamicContractRead = (
+    functionName: string,
+    account: `0x${string}` | Account | undefined,
+    args: readonly unknown[] | undefined
+) => {
+    const readResult = useContractRead({
+        address: '0x45eb0bCa5e5dDA84DF9549053A8cC3407E77D1BE',
         account,
         abi: licenseABI,
         functionName,
@@ -22,7 +44,7 @@ export const useDynamicPrepareContractWrite = (
         chainId: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '1')
     });
 
-    return config;
+    return readResult;
 }
 
 /**
@@ -35,13 +57,15 @@ export const dynamicContractRead = async (
     args: readonly unknown[] | undefined
 ) => {
     const data = await readContract({
-        address: '0x9A947b7d642e79A50313e5f9c9551dF6d4463261',
+        address: '0x45eb0bCa5e5dDA84DF9549053A8cC3407E77D1BE',
         account,
         abi: licenseABI,
         functionName,
         args,
         chainId: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '1')
-    });
+    }).catch((err) => {
+        console.log('Error reading contract: ', err);
+    })
 
     return data;
 }
