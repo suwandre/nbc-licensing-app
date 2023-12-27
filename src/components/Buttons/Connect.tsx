@@ -32,13 +32,14 @@ export const ConnectButton = () => {
     const { isConnected } = useAccount();
     const { disconnectAsync } = useDisconnect();
 
-    const { setIsAuthenticated, setIsSigningMessage } = useContext(AuthContext);
+    const { setIsAuthenticated, setIsSigningMessage, setSigninSignature } = useContext(AuthContext);
 
     const handleAuth = async () => {
         await web3Auth(
             isConnected,
             setIsAuthenticated,
             setIsSigningMessage,
+            setSigninSignature,
             connectAsync,
             disconnectAsync,
             requestChallengeAsync,

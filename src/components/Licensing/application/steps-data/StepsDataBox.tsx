@@ -24,26 +24,26 @@ export const StepsDataBox = ({
     royaltyFee,
 }: StepsDataProps) => {
     return (
-        <Flex p='md' gap='md' miw='45%' direction='column' sx={(theme) => ({
+        <Flex p='md' gap='md' miw='45%' maw='45%' direction='column' sx={(theme) => ({
             border: '2px solid white',
-            borderRadius: '10px'
+            borderRadius: '10px',
         })}>
             <Center mb={20}><Text size={24}>TECHNICAL VARIABLE DATA</Text></Center>
-            <Text size='md'>Wallet address: <Text span c='#42ca9f'>{walletAddress as string}</Text> </Text>
+            <Text size='md'>Wallet address: <Text span c='#42ca9f' size='xs'>{walletAddress as string}</Text> </Text>
             <Divider size='md' c='#42ca9f' />
-            <Text size='md'>First packed data: <Text span c='#42ca9f'>{firstPackedData as unknown as string}</Text></Text>
+            <Text size='md'>First packed data: <Text span c='#42ca9f' size='xs'>{firstPackedData as unknown as string}</Text></Text>
             <Divider size='md' c='#42ca9f' />
-            <Text size='md'>Second packed data: <Text span c='#42ca9f'>{secondPackedData as unknown as string}</Text> </Text>
+            <Text size='md'>Second packed data: <Text span c='#42ca9f' size='xs'>{secondPackedData as unknown as string}</Text> </Text>
             <Divider size='md' c='#42ca9f' />
-            <Text size='md'>License type chosen: <Text span c='#42ca9f'>{licenseType}</Text> </Text>
+            <Text size='md'>License type chosen: <Text span c='#42ca9f' size='xs'>{licenseType}</Text> </Text>
             <Divider size='md' c='#42ca9f' />
-            <Text size='md'>License application hash: <Text span c='#42ca9f'>{applicationHash}</Text> </Text>
+            <Text size='md'>License application hash: <Text span c='#42ca9f' size='xs'>{applicationHash}</Text> </Text>
             <Divider size='md' c='#42ca9f' />
-            <Text size='md'>Signature from app. hash: <Text span c='#42ca9f'>{signature}</Text> </Text>
+            <Text size='md'>Signature from app. hash: <Text span c='#42ca9f' size='xs'>{signature}</Text> </Text>
             <Divider size='md' c='#42ca9f' />
-            <Text size='md'>License fee: <Text span c='#42ca9f'>{licenseFee}</Text></Text>
+            <Text size='md'>License fee: <Text span c='#42ca9f' size='xs'>{licenseFee}</Text></Text>
             <Divider size='md' c='#42ca9f' />
-            <Text size='md'>Royalty fee: <Text span c='#42ca9f'>{royaltyFee}</Text></Text>
+            <Text size='md'>Royalty fee: <Text span c='#42ca9f' size='xs'>{royaltyFee}</Text></Text>
             <Divider size='md' c='#42ca9f' />
         </Flex>
     )

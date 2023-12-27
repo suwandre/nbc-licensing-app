@@ -308,7 +308,9 @@ export default function Home() {
           </Flex>
           <Flex direction="row" miw='90%' justify='space-around'>
             <Flex direction="column" miw="50%" justify='center'>
-              <ConnectWalletStep />
+              <ConnectWalletStep 
+                walletConnected={!!sessionData?.user?.address}
+              />
               <LicenseeAccountStep 
                 registerAccountIsLoading={registerAccountIsLoading}
                 registerAccountWrite={registerAccountWrite}  
