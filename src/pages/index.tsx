@@ -10,9 +10,18 @@ import {
   // useSignMessage,
   useWalletClient,
 } from "wagmi";
-import { Button, Flex } from "@mantine/core";
+import { Badge, Button, Flex, Text, Tooltip } from "@mantine/core";
 import { GetServerSidePropsContext } from "next";
-import { Account, BytesSizeMismatchError, SignMessageParameters, fromHex, keccak256, parseUnits, toBytes, toHex } from "viem";
+import {
+  Account,
+  BytesSizeMismatchError,
+  SignMessageParameters,
+  fromHex,
+  keccak256,
+  parseUnits,
+  toBytes,
+  toHex,
+} from "viem";
 import {
   dynamicContractRead,
   useDynamicContractRead,
@@ -27,9 +36,15 @@ import {
 } from "react";
 import AuthContext from "@/components/Auth/AuthContext";
 import { readContract } from "@wagmi/core";
-import CryptoJS, { SHA256, lib } from 'crypto-js';
+import CryptoJS, { SHA256, lib } from "crypto-js";
 import { signMessage } from "viem/_types/accounts/utils/signMessage";
 import { useSignMessage } from "@/utils/signMessage";
+import {
+  IconAlertOctagon,
+  IconFileArrowRight,
+  IconWallet,
+} from "@tabler/icons";
+import { LicenseApplicationStepsBox } from "@/components/Licensing/application/StepsBox";
 
 export default function Home() {
   const { address: accountAddress } = useAccount();
@@ -65,20 +80,20 @@ export default function Home() {
     write: registerAccountWrite,
   } = useContractWrite(registerAccountConfig);
 
-  const { 
+  const {
     isLoading: signMessageIsLoading,
     isError: signMessageError,
     isSuccess: signMessageIsSuccess,
     signature: signMessageSignature,
-    sign: signFunction
+    sign: signFunction,
   } = useSignMessage({
-    message: applicationHash
+    message: applicationHash,
   });
 
   useEffect(() => {
-    console.log('is signature success: ', signMessageIsSuccess);
+    console.log("is signature success: ", signMessageIsSuccess);
     if (signMessageIsSuccess) {
-      setSignature(signMessageSignature as string | undefined ?? '');
+      setSignature((signMessageSignature as string | undefined) ?? "");
     }
   }, [signMessageIsSuccess, signMessageSignature]);
 
@@ -86,7 +101,7 @@ export default function Home() {
 
   const modifications = toHex("None");
 
-  console.log('modifications: ', modifications);
+  console.log("modifications: ", modifications);
 
   const submitApplicationConfig = useDynamicPrepareContractWrite(
     "submitApplication",
@@ -114,9 +129,7 @@ export default function Home() {
   const payLicenseFeeConfig = useDynamicPrepareContractWrite(
     "payLicenseFee",
     sessionAddress,
-    [
-      applicationHash
-    ],
+    [applicationHash],
     BigInt("30000000000000000")
   );
 
@@ -132,11 +145,7 @@ export default function Home() {
   const reportConfig = useDynamicPrepareContractWrite(
     "submitReport",
     sessionAddress,
-    [
-      sessionAddress,
-      applicationHash,
-      "https://url.com"
-    ],
+    [sessionAddress, applicationHash, "https://url.com"],
     undefined
   );
 
@@ -152,11 +161,7 @@ export default function Home() {
   const payRoyaltyConfig = useDynamicPrepareContractWrite(
     "payRoyalty",
     sessionAddress,
-    [
-      applicationHash,
-      BigInt(0),
-      BigInt("30000000000000000")
-    ],
+    [applicationHash, BigInt(0), BigInt("30000000000000000")],
     BigInt("30000000000000000")
   );
 
@@ -168,19 +173,19 @@ export default function Home() {
     write: payRoyaltyWrite,
   } = useContractWrite(payRoyaltyConfig);
 
-  const { data: licenseFeeData, error: licenseFeeError } = useDynamicContractRead(
-    "getLicenseFee",
-    sessionAddress,
-    [sessionAddress, applicationHash]
-  );
+  const { data: licenseFeeData, error: licenseFeeError } =
+    useDynamicContractRead("getLicenseFee", sessionAddress, [
+      sessionAddress,
+      applicationHash,
+    ]);
 
-  const { data: reportingFrequencyData, error: reportingFrequencyError } = useDynamicContractRead(
-    "getReportingFrequency",
-    sessionAddress,
-    [sessionAddress, applicationHash]
-  );
+  const { data: reportingFrequencyData, error: reportingFrequencyError } =
+    useDynamicContractRead("getReportingFrequency", sessionAddress, [
+      sessionAddress,
+      applicationHash,
+    ]);
 
-  console.log('reporting frequency data: ', reportingFrequencyData);
+  console.log("reporting frequency data: ", reportingFrequencyData);
 
   // use effect to call `getAccount` whenever `sessionAddress` changes.
   useEffect(() => {
@@ -189,11 +194,11 @@ export default function Home() {
         sessionAddress,
       ]);
 
-      console.log("get account data: ", data)
+      console.log("get account data: ", data);
     };
 
     const getPackedData = async () => {
-      const data = await dynamicContractRead("getPackedData", sessionAddress, [
+      const data = (await dynamicContractRead("getPackedData", sessionAddress, [
         BigInt(1702115970),
         BigInt(0),
         BigInt(1702115970 + 31536000),
@@ -203,33 +208,37 @@ export default function Home() {
         BigInt(10000),
         BigInt(0),
         BigInt(0),
-        BigInt(0)
-      ]) as BigInt[];
-  
+        BigInt(0),
+      ])) as BigInt[];
+
       console.log("get packed data: ", data);
-  
+
       setFirstPackedData(data[0]);
       setSecondPackedData(data[1]);
-    }
+    };
     const getApplicationHash = async () => {
-      const data = await dynamicContractRead("getApplicationHash", sessionAddress, [
+      const data = (await dynamicContractRead(
+        "getApplicationHash",
         sessionAddress,
-        licenseHash,
-        firstPackedData,
-        secondPackedData,
-        modifications,
-        "lololol123123123"
-      ]) as string;
+        [
+          sessionAddress,
+          licenseHash,
+          firstPackedData,
+          secondPackedData,
+          modifications,
+          "lololol123123123",
+        ]
+      )) as string;
 
       console.log("get application hash: ", data);
 
       setApplicationHash(data);
-    }
+    };
 
     const callSetLicenseFee = async () => {
-      console.log('license fee: ', licenseFee);
+      console.log("license fee: ", licenseFee);
       setLicenseFee(String(Number(licenseFeeData)));
-    }
+    };
 
     getAccount();
     getPackedData();
@@ -240,9 +249,134 @@ export default function Home() {
   return (
     <>
       <Layout pageTitle="Licensing">
-        <Flex direction="column">
-          <Flex direction="column">
-          <Button
+        <Flex direction="column" miw="100%" align="center">
+          <Text size={55}>LICENSING PROCESS EXAMPLE</Text>
+          <Flex
+            direction="column"
+            align="center"
+            justify="center"
+            maw="75%"
+            sx={(theme) => ({
+              border: "1px solid #ca4242",
+              borderRadius: "10px",
+              padding: "10px",
+              marginBottom: "20px",
+            })}
+          >
+            <IconAlertOctagon
+              color="#ca4242"
+              size={35}
+              style={{ marginRight: 10 }}
+            />
+            <Text
+              sx={(theme) => ({
+                color: "#ca4242",
+                fontSize: "16px",
+                [theme.fn.smallerThan("sm")]: {
+                  fontSize: "12px",
+                },
+                textAlign: "center",
+              })}
+            >
+              <b>
+                This example process interacts with the smart contract. For
+                non-technical users, please refrain from refreshing this website
+                when going through the example process to ensure a seamless
+                tryout.
+              </b>
+            </Text>
+          </Flex>
+          <Flex direction="row" miw="100%" justify="space-around">
+            <Flex direction="column" miw="75%">
+              <LicenseApplicationStepsBox marginTop={20}>
+                <Flex
+                  direction="row"
+                  align="center"
+                  justify="space-between"
+                  sx={(theme) => ({
+                    marginLeft: 15,
+                  })}
+                >
+                  <Flex direction="row" align="center">
+                    <IconWallet size={25} />
+                    <Text
+                      color={"white"}
+                      sx={(theme) => ({
+                        margin: "10px 10px 10px 15px",
+                        fontSize: 16,
+                        fontWeight: 500,
+
+                        [theme.fn.smallerThan("sm")]: {
+                          fontSize: 14,
+                          margin: "20px 5px 20px 5px",
+                        },
+                      })}
+                    >
+                      1. Connect wallet
+                    </Text>
+                  </Flex>
+                </Flex>
+              </LicenseApplicationStepsBox>
+              <LicenseApplicationStepsBox marginTop={20}>
+                <Flex
+                  direction="row"
+                  align="center"
+                  justify="space-between"
+                  sx={(theme) => ({
+                    marginLeft: 15,
+                  })}
+                >
+                  <Flex direction="row" align="center">
+                    <IconFileArrowRight size={25} />
+                    <Text
+                      color={"white"}
+                      sx={(theme) => ({
+                        margin: "10px 10px 10px 15px",
+                        fontSize: 16,
+                        fontWeight: 500,
+
+                        [theme.fn.smallerThan("sm")]: {
+                          fontSize: 14,
+                          margin: "20px 5px 20px 5px",
+                        },
+                      })}
+                    >
+                      2. Create Licensee Account
+                    </Text>
+                    <Tooltip
+                      multiline
+                      width={350}
+                      label={`Creates your licensee account with the following data parameters: ${sessionData?.user?.address}|Test Name|25 January 2000|12 Test Road, NY 12211, USA|test@gmail.com|+1123123123|None|USA|USA. For more information, please refer to our documentation.`}
+                    >
+                      <Badge
+                        sx={(theme) => ({
+                          backgroundColor: "#42ca9f",
+                        })}
+                      >
+                        <p style={{ color: "white" }}>Info</p>
+                      </Badge>
+                    </Tooltip>
+                  </Flex>
+                  <Button
+                    sx={(theme) => ({
+                      backgroundColor: "#42ca9f",
+                      marginRight: 25,
+                      ":hover": {
+                        transform: "scale(1.01) translate(1px, -3px)",
+                        transitionDuration: "200ms",
+                        backgroundColor: "#42ca9f",
+                      },
+
+                      [theme.fn.smallerThan("sm")]: {
+                        fontSize: 10,
+                      },
+                    })}
+                  >
+                    Create
+                  </Button>
+                </Flex>
+              </LicenseApplicationStepsBox>
+              {/* <Button
               sx={(theme) => ({
                 backgroundColor: "#42ca9f",
                 transitionDuration: "200ms",
@@ -350,9 +484,11 @@ export default function Home() {
               onClick={() => payRoyaltyWrite?.()}
             >
               Pay Royalty Fee
-            </Button>
+            </Button> */}
+            </Flex>
+            <p>Hi</p>
           </Flex>
-          <Flex direction="column">
+          {/* <Flex direction="column">
             <p>Wagmi account address: {accountAddress}</p>
             <p>Session address: {sessionAddress as string}</p>
             <p>First packedData: {String(firstPackedData)}</p>
@@ -360,7 +496,7 @@ export default function Home() {
             <p>Application Hash: {applicationHash}</p>
             <p>Message signature: {signature}</p>
             <p>License fee: {licenseFee}</p>
-          </Flex>
+          </Flex> */}
         </Flex>
       </Layout>
     </>
