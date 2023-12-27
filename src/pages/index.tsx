@@ -47,6 +47,15 @@ import {
 import { LicenseApplicationStepsBox } from "@/components/Licensing/application/StepsBox";
 import { ConnectWalletStep } from "@/components/Licensing/application/example-steps/ConnectWallet";
 import { LicenseeAccountStep } from "@/components/Licensing/application/example-steps/LicenseeAccount";
+import { ApproveAccountStep } from "@/components/Licensing/application/example-steps/ApproveAccount";
+import { ChooseLicenseStep } from "@/components/Licensing/application/example-steps/ChooseLicense";
+import { SignApplicationStep } from "@/components/Licensing/application/example-steps/SignApplication";
+import { SubmitApplicationStep } from "@/components/Licensing/application/example-steps/SubmitApplication";
+import { PayFeeStep } from "@/components/Licensing/application/example-steps/PayFee";
+import { ApproveApplicationStep } from "@/components/Licensing/application/example-steps/ApproveApplication";
+import { SubmitReportStep } from "@/components/Licensing/application/example-steps/SubmitReport";
+import { ApproveReportStep } from "@/components/Licensing/application/example-steps/ApproveReport";
+import { PayRoyaltyStep } from "@/components/Licensing/application/example-steps/PayRoyalty";
 
 export default function Home() {
   const { address: accountAddress } = useAccount();
@@ -59,6 +68,9 @@ export default function Home() {
   const [applicationHash, setApplicationHash] = useState<string>("");
   const [signature, setSignature] = useState<string>("");
   const [licenseFee, setLicenseFee] = useState<string>("");
+  const [licenseType, setLicenseType] = useState<string>("");
+
+  console.log('license type: ', licenseType);
 
   // session address MAY differ than `accountAddress` from `useAccount()`; session address is to be used for all purposes.
   const sessionAddress = sessionData?.user?.address;
@@ -285,6 +297,11 @@ export default function Home() {
                 non-technical users, please refrain from refreshing this website
                 when going through the example process to ensure a seamless
                 tryout.
+                <br />
+                <br />
+                The tooltip on each step provides a brief description of what that respective step does, but not fully.
+                <br />
+                It is recommended to thoroughly read the documentation of the entire process in detail HERE.
               </b>
             </Text>
           </Flex>
@@ -296,6 +313,18 @@ export default function Home() {
                 registerAccountWrite={registerAccountWrite}  
                 sessionData={sessionData}
               />
+              <ApproveAccountStep />
+              <ChooseLicenseStep 
+                licenseType={licenseType}
+                setLicenseType={setLicenseType}
+              />
+              <SignApplicationStep />
+              <SubmitApplicationStep />
+              <PayFeeStep />
+              <ApproveApplicationStep />
+              <SubmitReportStep />
+              <ApproveReportStep />
+              <PayRoyaltyStep />
               {/* <Button
               sx={(theme) => ({
                 backgroundColor: "#42ca9f",

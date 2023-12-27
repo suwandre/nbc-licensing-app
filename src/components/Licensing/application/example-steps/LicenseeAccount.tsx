@@ -39,7 +39,7 @@ export const LicenseeAccountStep = ({
                         },
                       })}
                     >
-                      2. Create Licensee Account
+                      2. Register licensee account
                     </Text>
                     <Tooltip
                       multiline
