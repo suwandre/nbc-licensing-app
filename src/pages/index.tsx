@@ -56,6 +56,7 @@ import { ApproveApplicationStep } from "@/components/Licensing/application/examp
 import { SubmitReportStep } from "@/components/Licensing/application/example-steps/SubmitReport";
 import { ApproveReportStep } from "@/components/Licensing/application/example-steps/ApproveReport";
 import { PayRoyaltyStep } from "@/components/Licensing/application/example-steps/PayRoyalty";
+import { StepsDataBox } from "@/components/Licensing/application/steps-data/StepsDataBox";
 
 export default function Home() {
   const { address: accountAddress } = useAccount();
@@ -263,7 +264,7 @@ export default function Home() {
   return (
     <>
       <Layout pageTitle="Licensing">
-        <Flex direction="column" miw="100%" align="center">
+        <Flex direction="column" miw="100%" align="center" justify='center'>
           <Text size={55}>LICENSING PROCESS EXAMPLE</Text>
           <Flex
             direction="column"
@@ -305,8 +306,8 @@ export default function Home() {
               </b>
             </Text>
           </Flex>
-          <Flex direction="row" miw="100%" justify="space-around">
-            <Flex direction="column" miw="75%">
+          <Flex direction="row" miw='90%' justify='space-around'>
+            <Flex direction="column" miw="50%" justify='center'>
               <ConnectWalletStep />
               <LicenseeAccountStep 
                 registerAccountIsLoading={registerAccountIsLoading}
@@ -435,7 +436,7 @@ export default function Home() {
               Pay Royalty Fee
             </Button> */}
             </Flex>
-            <p>Hi</p>
+            <StepsDataBox />
           </Flex>
           {/* <Flex direction="column">
             <p>Wagmi account address: {accountAddress}</p>

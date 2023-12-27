@@ -13,7 +13,7 @@ export const LicenseApplicationStepsBox = ({style, children, width, marginTop, m
     return (
         <Box
             style={style ? style : {border: '2px solid white'}}
-            w={width ? width : '60%'}
+            w={width ? width : '100%'}
             sx={(theme) => ({
                 borderRadius: theme.radius.md,
                 textAlign: 'center',
