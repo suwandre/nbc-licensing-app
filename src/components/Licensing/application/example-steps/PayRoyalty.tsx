@@ -37,10 +37,10 @@ export const PayRoyaltyStep = () => {
               >
                 <Badge
                   sx={(theme) => ({
-                    backgroundColor: "#42ca9f",
+                    backgroundColor: '#42ca9f',
                   })}
                 >
-                  <p style={{ color: "white" }}>Info</p>
+                  <p style={{ color: 'white' }}>Info</p>
                 </Badge>
               </Tooltip>
             </Flex>

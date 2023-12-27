@@ -1,21 +1,67 @@
 import { Badge, Button, Flex, Text, Tooltip } from "@mantine/core"
 import { LicenseApplicationStepsBox } from "../StepsBox"
-import { IconFileArrowRight } from "@tabler/icons"
+import { IconCheck, IconFileArrowRight, IconRegistered } from "@tabler/icons"
 import { CustomSessionType } from "@/utils/session"
+import { useContractWrite } from "wagmi"
+import { dynamicContractRead, useDynamicPrepareContractWrite } from "@/utils/contractActions"
+import { toHex } from "viem"
+import { useEffect, useState } from "react"
 
 type LicenseeAccountStepProps = {
-    registerAccountWrite: (() => void) | undefined,
-    registerAccountIsLoading: boolean,
+    // registerAccountWrite: (() => void) | undefined,
+    // registerAccountIsLoading: boolean,
     sessionData: CustomSessionType | null
 }
 
 export const LicenseeAccountStep = ({
-    registerAccountWrite,
-    registerAccountIsLoading,
+    // registerAccountWrite,
+    // registerAccountIsLoading,
     sessionData
 }: LicenseeAccountStepProps) => {
+    const convertToBytes = toHex(
+        `${sessionData?.user?.address}|Test Name|25 January 2000|12 Test Road, NY 12211, USA|test@gmail.com|+1123123123|None|USA|USA`
+      );
+    
+      const registerAccountConfig = useDynamicPrepareContractWrite(
+        "registerAccount",
+        sessionData?.user?.address,
+        [convertToBytes],
+        undefined
+      );
+
+    const {
+        data: registerAccountData,
+        error: registerAccountError,
+        isLoading: registerAccountIsLoading,
+        isSuccess: registerAccountIsSuccess,
+        write: registerAccountWrite,
+      } = useContractWrite(registerAccountConfig);
+
+      const [hasAccount, setHasAccount] = useState(false);
+
+      useEffect(() => {
+        const checkAccountRegistered = async () => {
+            const data = (await dynamicContractRead(
+                "getAccount",
+                sessionData?.user?.address,
+                [
+                    sessionData?.user?.address
+                ]
+            )) as string;
+
+            if (data["data"].length > 0 || data["data"] !== '0x') {
+                setHasAccount(true);
+            }
+        }
+
+        checkAccountRegistered();
+      }, [sessionData?.user?.address]);
+
     return (
-        <LicenseApplicationStepsBox marginTop={20}>
+        <LicenseApplicationStepsBox 
+            marginTop={20}
+            style={{border: hasAccount ? '2px solid #42ca9f' : '2px solid white'}}
+        >
                 <Flex
                   direction="row"
                   align="center"
@@ -25,9 +71,9 @@ export const LicenseeAccountStep = ({
                   })}
                 >
                   <Flex direction="row" align="center">
-                    <IconFileArrowRight size={25} />
+                    <IconRegistered size={25} color={hasAccount ? '#42ca9f' : 'white'} />
                     <Text
-                      color={"white"}
+                      color={hasAccount ? '#42ca9f' : 'white'}
                       sx={(theme) => ({
                         margin: "10px 10px 10px 15px",
                         fontSize: 16,
@@ -55,7 +101,10 @@ export const LicenseeAccountStep = ({
                       </Badge>
                     </Tooltip>
                   </Flex>
-                  <Button
+                  {registerAccountIsSuccess || hasAccount ? (
+                    <IconCheck style={{marginRight: 25}} color='#42ca9f' />
+                  ) : (
+                    <Button
                     sx={(theme) => ({
                       backgroundColor: "#42ca9f",
                       marginRight: 25,
@@ -74,6 +123,7 @@ export const LicenseeAccountStep = ({
                   >
                     Create
                   </Button>
+                  )}
                 </Flex>
               </LicenseApplicationStepsBox>
     )
