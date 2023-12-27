@@ -8,6 +8,10 @@ type AuthContextComponents = {
     setSessionData: Dispatch<SetStateAction<CustomSessionType | null>>;
     isSigningMessage: boolean;
     setIsSigningMessage: Dispatch<SetStateAction<boolean>>;
+    kycVerified: boolean;
+    setKYCVerified: Dispatch<SetStateAction<boolean>>;
+    signinSignature: string;
+    setSigninSignature: Dispatch<SetStateAction<string>>;
 }
 
 const AuthContext = createContext({} as AuthContextComponents);

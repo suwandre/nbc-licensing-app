@@ -1,9 +1,11 @@
 import { Badge, Button, Flex, Text, Tooltip } from '@mantine/core';
 import { LicenseApplicationStepsBox } from '../StepsBox';
 import { IconUserCheck } from '@tabler/icons';
+import { useContext } from 'react';
+import AuthContext from '@/components/Auth/AuthContext';
 
 export const KYCVerification = () => {
-    /// TO DO: KYC VERIFICATION CHECK (AND ADD TO AUTH CONTEXT TO SEE IF KYC IS VERIFIED).
+    const { kycVerified } = useContext(AuthContext);
     return (
         <LicenseApplicationStepsBox marginTop={20}>
             <Flex

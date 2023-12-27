@@ -5,6 +5,7 @@ import { Connector, ConnectorData, useAccount, useConnect, useDisconnect, useSig
 import { web3Auth } from '@/utils/web3Auth';
 import { useAuthRequestChallengeEvm } from '@moralisweb3/next';
 import { CustomSessionType } from '@/utils/session';
+import { createUser } from '@/utils/apiCalls';
 
 export const AuthProvider = ({ children }: any) => {
     // `isConnected` from `useAccount` only checks if Metamask is connected and NOT if the user is `authenticated`, thus we add an extra state here to check for auth.
@@ -12,6 +13,10 @@ export const AuthProvider = ({ children }: any) => {
     const [sessionData, setSessionData] = useState(null) as [CustomSessionType | null, Dispatch<SetStateAction<CustomSessionType | null>>];
     // whether the user is currently signing a message on their wallet provider.
     const [isSigningMessage, setIsSigningMessage] = useState(false);
+    // temporary state; will be replaced with actual state from the backend to check if the user has completed KYC.
+    const [kycVerified, setKYCVerified] = useState(true);
+    // the signature from the message the user signs to authenticate themselves while signing in via their provider.
+    const [signinSignature, setSigninSignature] = useState('');
 
     const { isConnected, address, connector: activeConnector } = useAccount();
     const { connectAsync } = useConnect();
@@ -28,6 +33,7 @@ export const AuthProvider = ({ children }: any) => {
                     isConnected,
                     setIsAuthenticated,
                     setIsSigningMessage,
+                    setSigninSignature,
                     connectAsync,
                     disconnectAsync,
                     requestChallengeAsync,
@@ -56,6 +62,18 @@ export const AuthProvider = ({ children }: any) => {
           const session = await getSession() as CustomSessionType | null;
     
           if (session) {
+            await createUser(
+                session?.user?.address as string ?? '',
+                Date.parse(session?.expires),
+                session?.user?.chainId ?? 1,
+                session?.user?.domain ?? '',
+                session?.user?.nonce ?? '',
+                signinSignature,
+                session?.user?.payload,
+                session?.user?.profileId ?? '',
+                session?.user?.uri ?? '',
+                parseInt(session?.user?.version || '1')
+            )
             console.log('session: ', session);
             setIsAuthenticated(true);
             setSessionData(session);
@@ -79,7 +97,18 @@ export const AuthProvider = ({ children }: any) => {
       }, [isConnected, address, isSigningMessage, activeConnector, isAuthenticated]);
 
     return (
-        <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated, sessionData, setSessionData, isSigningMessage, setIsSigningMessage}}>
+        <AuthContext.Provider value={{
+            isAuthenticated, 
+            setIsAuthenticated, 
+            sessionData, 
+            setSessionData, 
+            isSigningMessage, 
+            setIsSigningMessage,
+            kycVerified,
+            setKYCVerified,
+            signinSignature,
+            setSigninSignature
+        }}>
             {children}
         </AuthContext.Provider>
     )

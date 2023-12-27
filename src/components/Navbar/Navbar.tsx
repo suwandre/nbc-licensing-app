@@ -177,7 +177,7 @@ const AuthenticatedAccountMenu = () => {
         </Menu.Target>
 
         <Menu.Dropdown className={classes.menuDropdown}>
-          <Menu.Item
+          {/* <Menu.Item
             onClick={() => router.push('/account/dashboard')}
             icon={<IconLayoutDashboard size={14} />}
           >
@@ -189,7 +189,13 @@ const AuthenticatedAccountMenu = () => {
           >
             <Text>Account Settings</Text>
           </Menu.Item>
-          <Divider />
+          <Menu.Item
+            onClick={() => router.push('/account/kyc')}
+            icon={<IconUser size={14} />}
+          >
+            <Text>KYC</Text>
+          </Menu.Item>
+          <Divider /> */}
           <Menu.Item onClick={handleLogout} icon={<IconLogout size={14} />}>
             Logout
           </Menu.Item>
@@ -208,7 +214,7 @@ const NavbarMenu = (props: any) => {
 
   return (
     <>
-      <Center className={enableDropdown && classes.centerItems}>
+      {/* <Center className={enableDropdown && classes.centerItems}>
         <Menu shadow="md" width={200}>
           <Menu.Target>
             <Button className={classes.transparentButton}>
@@ -227,14 +233,14 @@ const NavbarMenu = (props: any) => {
             <Divider />
             <Menu.Item
               icon={<IconPool size={14} />}
-              onClick={() => router.replace("/test2")}
+              onClick={() => router.replace("/applications")}
             >
               My Applications
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
-      </Center>
-      <Center className={enableDropdown && classes.centerItems}>
+      </Center> */}
+      {/* <Center className={enableDropdown && classes.centerItems}>
         <Menu shadow="md" width={200}>
           <Menu.Target>
             <Button
@@ -245,7 +251,7 @@ const NavbarMenu = (props: any) => {
             </Button>
           </Menu.Target>
         </Menu>
-      </Center>
+      </Center> */}
       <Center className={classes.centerItems}>
         {!isAuthenticated ? (
           <ConnectButton />

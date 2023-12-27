@@ -1,14 +1,17 @@
 import { RequestChallengeEvmRequestClient } from '@moralisweb3/next';
 import { ConnectArgs, ConnectResult, PublicClient, SignMessageArgs } from '@wagmi/core';
 import { BuiltInProviderType } from 'next-auth/providers';
-import { LiteralUnion, SignInAuthorizationParams, SignInOptions, SignOutParams } from 'next-auth/react';
-import { Dispatch, SetStateAction } from 'react';
+import { LiteralUnion, SignInAuthorizationParams, SignInOptions, SignOutParams, getSession } from 'next-auth/react';
+import { Dispatch, SetStateAction, useCallback } from 'react';
 import { MutateOptions } from 'react-query';
 import { InjectedConnector } from '@wagmi/core/connectors';
+import { CustomSessionType } from './session';
 
 /**
  * Connects to an injected Web3 provider, requests and signs a challenge, 
  * and signs the user in via `next-auth/react`'s `signIn`, providing a session token.
+ * 
+ * If the user does not have an account in the database yet, one will be created for them.
  */
 export const web3Auth = async (
     /** `isConnected` from wagmi's `useAccount()` hook. */
@@ -17,6 +20,8 @@ export const web3Auth = async (
     setIsAuthenticated: Dispatch<SetStateAction<boolean>>,
     /** `setIsSigningMessage` from AuthContext component. */
     setIsSigningMessage: Dispatch<SetStateAction<boolean>>,
+    /** `setSigninSignature` from AuthContext component. */
+    setSigninSignature: Dispatch<SetStateAction<string>>,
     // /** `setSessionData` from AuthContext component. */
     // setSessionData: Dispatch<SetStateAction<CustomSessionType|null>>,
     connectAsync: (args?: Partial<ConnectArgs> | undefined) => Promise<ConnectResult<PublicClient>>,
@@ -62,8 +67,9 @@ export const web3Auth = async (
             signature: sig,
             redirect: false,
             callbackUrl: '/',
-        }).then(data => {
+        }).then(async data => {
             setIsAuthenticated(true);
+            setSigninSignature(sig);
 
             console.log('signin data: ', data);
         }).catch((err) => {
