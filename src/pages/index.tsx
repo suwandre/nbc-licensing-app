@@ -69,7 +69,7 @@ export default function Home() {
   const [applicationHash, setApplicationHash] = useState<string>("");
   const [signature, setSignature] = useState<string>("");
   const [licenseFee, setLicenseFee] = useState<string>("");
-  const [licenseType, setLicenseType] = useState<string>("");
+  const [licenseType, setLicenseType] = useState<string>('Asset Creation');
 
   console.log('license type: ', licenseType);
 
@@ -436,7 +436,15 @@ export default function Home() {
               Pay Royalty Fee
             </Button> */}
             </Flex>
-            <StepsDataBox />
+            <StepsDataBox 
+              walletAddress={sessionAddress as string ?? 'N/A'}
+              firstPackedData={firstPackedData}
+              secondPackedData={secondPackedData}
+              licenseType={licenseType}
+              applicationHash={applicationHash}
+              signature={signature}
+              licenseFee={licenseFee}
+            />
           </Flex>
           {/* <Flex direction="column">
             <p>Wagmi account address: {accountAddress}</p>

@@ -57,6 +57,7 @@ export const ChooseLicenseStep = ({
               data={['Asset Creation', 'Asset Usage', 'Asset Modification']}
               value={licenseType}
               onChange={(e: any) => setLicenseType(e.currentTarget.value)}
+              defaultValue={'Asset Creation'}
             />
           </Flex>
         </LicenseApplicationStepsBox>
