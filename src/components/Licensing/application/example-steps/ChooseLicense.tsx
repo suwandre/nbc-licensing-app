@@ -12,7 +12,10 @@ export const ChooseLicenseStep = ({
   setLicenseType
 }: ChooseLicenseStepProps) => {
     return (
-        <LicenseApplicationStepsBox marginTop={20}>
+        <LicenseApplicationStepsBox 
+          marginTop={20}
+          style={{ border: '2px solid #42ca9f' }}
+        >
           <Flex
             direction="row"
             align="center"
@@ -22,9 +25,9 @@ export const ChooseLicenseStep = ({
             })}
           >
             <Flex direction="row" align="center">
-              <IconWallet size={25} />
+              <IconWallet size={25} color='#42ca9f' />
               <Text
-                color={"white"}
+                color={"#42ca9f"}
                 sx={(theme) => ({
                   margin: "10px 10px 10px 15px",
                   fontSize: 16,
