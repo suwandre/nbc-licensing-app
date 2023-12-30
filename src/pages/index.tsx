@@ -314,7 +314,9 @@ export default function Home() {
               <LicenseeAccountStep 
                 sessionData={sessionData}
               />
-              <ApproveAccountStep />
+              <ApproveAccountStep 
+                sessionData={sessionData}
+              />
               <ChooseLicenseStep 
                 licenseType={licenseType}
                 setLicenseType={setLicenseType}
