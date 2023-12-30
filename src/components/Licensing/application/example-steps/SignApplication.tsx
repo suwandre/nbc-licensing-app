@@ -1,10 +1,45 @@
 import { Badge, Button, Flex, Text, Tooltip } from "@mantine/core";
 import { LicenseApplicationStepsBox } from "../StepsBox";
-import { IconWallet } from "@tabler/icons";
+import { IconCheck, IconWallet } from "@tabler/icons";
+import { useSignMessage } from "@/utils/signMessage";
+import { useEffect } from "react";
 
-export const SignApplicationStep = () => {
+type SignApplicationStepProps = {
+  applicationHash: string,
+  // signature and setSignature are from 'index.tsx'.
+  signature: string,
+  setSignature: (signature: string) => void
+}
+
+export const SignApplicationStep = ({
+  applicationHash,
+  signature,
+  setSignature
+}: SignApplicationStepProps) => {
+  const {
+    isLoading: signMessageIsLoading,
+    isError: signMessageError,
+    isSuccess: signMessageIsSuccess,
+    signature: signMessageSignature,
+    sign: signFunction,
+  } = useSignMessage({
+    message: applicationHash
+  });
+
+  useEffect(() => {
+    console.log('is signature success: ', signMessageIsSuccess);
+    if (signMessageIsSuccess) {
+      setSignature((signMessageSignature as string | undefined) ?? '');
+    }
+  }, [signMessageIsSuccess, signMessageSignature, setSignature]);
+
+  // essentially a check wrapper to see if signature is not empty.
+  const hasSignature = signature !== '';
     return (
-        <LicenseApplicationStepsBox marginTop={20}>
+        <LicenseApplicationStepsBox 
+          marginTop={20}
+          style={{ border: hasSignature ? '2px solid #42ca9f' : '2px solid white' }}
+        >
           <Flex
             direction="row"
             align="center"
@@ -14,9 +49,9 @@ export const SignApplicationStep = () => {
             })}
           >
             <Flex direction="row" align="center">
-              <IconWallet size={25} />
+              <IconWallet size={25} color={hasSignature ? '#42ca9f' : 'white'} />
               <Text
-                color={"white"}
+                color={hasSignature ? "#42ca9f" : "white"}
                 sx={(theme) => ({
                   margin: "10px 10px 10px 15px",
                   fontSize: 16,
@@ -45,7 +80,10 @@ export const SignApplicationStep = () => {
                 </Badge>
               </Tooltip>
             </Flex>
-            <Button
+            {signature !== '' ? (
+              <IconCheck style={{ marginRight: 25 }} color='#42ca9f' />
+            ) : (
+              <Button
               sx={(theme) => ({
                 backgroundColor: "#42ca9f",
                 marginRight: 25,
@@ -59,9 +97,13 @@ export const SignApplicationStep = () => {
                   fontSize: 10,
                 },
               })}
+              onClick={signFunction}
+              disabled={signMessageIsLoading || !applicationHash}
+              loading={signMessageIsLoading}
             >
               Sign
             </Button>
+            )}
           </Flex>
         </LicenseApplicationStepsBox>
       );

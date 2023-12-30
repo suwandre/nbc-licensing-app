@@ -74,22 +74,22 @@ export default function Home() {
   // session address MAY differ than `accountAddress` from `useAccount()`; session address is to be used for all purposes.
   const sessionAddress = sessionData?.user?.address;
 
-  const {
-    isLoading: signMessageIsLoading,
-    isError: signMessageError,
-    isSuccess: signMessageIsSuccess,
-    signature: signMessageSignature,
-    sign: signFunction,
-  } = useSignMessage({
-    message: applicationHash,
-  });
+  // const {
+  //   isLoading: signMessageIsLoading,
+  //   isError: signMessageError,
+  //   isSuccess: signMessageIsSuccess,
+  //   signature: signMessageSignature,
+  //   sign: signFunction,
+  // } = useSignMessage({
+  //   message: applicationHash,
+  // });
 
-  useEffect(() => {
-    console.log("is signature success: ", signMessageIsSuccess);
-    if (signMessageIsSuccess) {
-      setSignature((signMessageSignature as string | undefined) ?? "");
-    }
-  }, [signMessageIsSuccess, signMessageSignature]);
+  // useEffect(() => {
+  //   console.log("is signature success: ", signMessageIsSuccess);
+  //   if (signMessageIsSuccess) {
+  //     setSignature((signMessageSignature as string | undefined) ?? "");
+  //   }
+  // }, [signMessageIsSuccess, signMessageSignature]);
 
   const licenseHash = keccak256(toHex("Asset Creation"));
 
@@ -300,7 +300,11 @@ export default function Home() {
                 licenseType={licenseType}
                 setLicenseType={setLicenseType}
               />
-              <SignApplicationStep />
+              <SignApplicationStep 
+                applicationHash={applicationHash}
+                signature={signature}
+                setSignature={setSignature}
+              />
               <SubmitApplicationStep />
               <PayFeeStep />
               <ApproveApplicationStep />
