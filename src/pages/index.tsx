@@ -82,22 +82,6 @@ export default function Home() {
 
   console.log("modifications: ", modifications);
 
-  // pay license fee and call
-  const payLicenseFeeConfig = useDynamicPrepareContractWrite(
-    "payLicenseFee",
-    sessionAddress,
-    [applicationHash],
-    BigInt("30000000000000000")
-  );
-
-  const {
-    data: payLicenseFeeData,
-    error: payLicenseFeeError,
-    isLoading: payLicenseFeeIsLoading,
-    isSuccess: payLicenseFeeIsSuccess,
-    write: payLicenseFeeWrite,
-  } = useContractWrite(payLicenseFeeConfig);
-
   // submit report config and call
   const reportConfig = useDynamicPrepareContractWrite(
     "submitReport",
@@ -173,6 +157,18 @@ export default function Home() {
       setFirstPackedData(data[0]);
       setSecondPackedData(data[1]);
     };
+
+    const callSetLicenseFee = async () => {
+      console.log("license fee: ", licenseFee);
+      setLicenseFee(String(Number(licenseFeeData)));
+    };
+
+    getAccount();
+    getPackedData();
+    callSetLicenseFee();
+  }, [sessionAddress]);
+
+  useEffect(() => {
     const getApplicationHash = async () => {
       const data = (await dynamicContractRead(
         "getApplicationHash",
@@ -192,16 +188,16 @@ export default function Home() {
       setApplicationHash(data);
     };
 
-    const callSetLicenseFee = async () => {
-      console.log("license fee: ", licenseFee);
-      setLicenseFee(String(Number(licenseFeeData)));
-    };
-
-    getAccount();
-    getPackedData();
-    getApplicationHash();
-    callSetLicenseFee();
-  }, [sessionAddress]);
+    if (
+      sessionAddress && 
+      licenseHash && 
+      firstPackedData && 
+      secondPackedData &&
+      modifications
+    ) {
+      getApplicationHash();
+    }
+  }, [sessionAddress, licenseHash, firstPackedData, secondPackedData, modifications]);
 
   return (
     <>
@@ -277,7 +273,10 @@ export default function Home() {
                 modifications={modifications}
                 applicationHash={applicationHash}
               />
-              <PayFeeStep />
+              <PayFeeStep 
+                sessionAddress={sessionAddress}
+                applicationHash={applicationHash}
+              />
               <ApproveApplicationStep />
               <SubmitReportStep />
               <ApproveReportStep />
