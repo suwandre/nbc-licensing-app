@@ -71,53 +71,16 @@ export default function Home() {
   const [licenseFee, setLicenseFee] = useState<string>("");
   const [licenseType, setLicenseType] = useState<string>('Asset Creation');
 
+  console.log('signature: ', signature);
+
   // session address MAY differ than `accountAddress` from `useAccount()`; session address is to be used for all purposes.
   const sessionAddress = sessionData?.user?.address;
-
-  // const {
-  //   isLoading: signMessageIsLoading,
-  //   isError: signMessageError,
-  //   isSuccess: signMessageIsSuccess,
-  //   signature: signMessageSignature,
-  //   sign: signFunction,
-  // } = useSignMessage({
-  //   message: applicationHash,
-  // });
-
-  // useEffect(() => {
-  //   console.log("is signature success: ", signMessageIsSuccess);
-  //   if (signMessageIsSuccess) {
-  //     setSignature((signMessageSignature as string | undefined) ?? "");
-  //   }
-  // }, [signMessageIsSuccess, signMessageSignature]);
 
   const licenseHash = keccak256(toHex("Asset Creation"));
 
   const modifications = toHex("None");
 
   console.log("modifications: ", modifications);
-
-  const submitApplicationConfig = useDynamicPrepareContractWrite(
-    "submitApplication",
-    sessionAddress,
-    [
-      licenseHash,
-      firstPackedData,
-      secondPackedData,
-      signature,
-      modifications,
-      "lololol123123123",
-    ],
-    undefined
-  );
-
-  const {
-    data: submitApplicationData,
-    error: submitApplicationError,
-    isLoading: submitApplicationIsLoading,
-    isSuccess: submitApplicationIsSuccess,
-    write: submitApplicationWrite,
-  } = useContractWrite(submitApplicationConfig);
 
   // pay license fee and call
   const payLicenseFeeConfig = useDynamicPrepareContractWrite(
@@ -220,7 +183,7 @@ export default function Home() {
           firstPackedData,
           secondPackedData,
           modifications,
-          "lololol123123123",
+          "hashsalttest",
         ]
       )) as string;
 
@@ -305,7 +268,15 @@ export default function Home() {
                 signature={signature}
                 setSignature={setSignature}
               />
-              <SubmitApplicationStep />
+              <SubmitApplicationStep 
+                sessionAddress={sessionData?.user?.address}
+                licenseHash={licenseHash}
+                firstPackedData={firstPackedData}
+                secondPackedData={secondPackedData}
+                signature={signature}
+                modifications={modifications}
+                applicationHash={applicationHash}
+              />
               <PayFeeStep />
               <ApproveApplicationStep />
               <SubmitReportStep />
