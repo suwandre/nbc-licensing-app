@@ -71,29 +71,8 @@ export default function Home() {
   const [licenseFee, setLicenseFee] = useState<string>("");
   const [licenseType, setLicenseType] = useState<string>('Asset Creation');
 
-  console.log('license type: ', licenseType);
-
   // session address MAY differ than `accountAddress` from `useAccount()`; session address is to be used for all purposes.
   const sessionAddress = sessionData?.user?.address;
-
-  // const convertToBytes = toHex(
-  //   `${sessionData?.user?.address}|Test Name|25 January 2000|12 Test Road, NY 12211, USA|test@gmail.com|+1123123123|None|USA|USA`
-  // );
-
-  // const registerAccountConfig = useDynamicPrepareContractWrite(
-  //   "registerAccount",
-  //   sessionAddress,
-  //   [convertToBytes],
-  //   undefined
-  // );
-
-  // const {
-  //   data: registerAccountData,
-  //   error: registerAccountError,
-  //   isLoading: registerAccountIsLoading,
-  //   isSuccess: registerAccountIsSuccess,
-  //   write: registerAccountWrite,
-  // } = useContractWrite(registerAccountConfig);
 
   const {
     isLoading: signMessageIsLoading,

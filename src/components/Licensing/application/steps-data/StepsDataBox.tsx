@@ -31,9 +31,9 @@ export const StepsDataBox = ({
             <Center mb={20}><Text size={24}>TECHNICAL VARIABLE DATA</Text></Center>
             <Text size='md'>Wallet address: <Text span c='#42ca9f' size='xs'>{walletAddress as string}</Text> </Text>
             <Divider size='md' c='#42ca9f' />
-            <Text size='md'>First packed data: <Text span c='#42ca9f' size='xs'>{firstPackedData as unknown as string}</Text></Text>
+            <Text size='md'>First packed data: <Text span c='#42ca9f' size='xs'>{String(firstPackedData)}</Text></Text>
             <Divider size='md' c='#42ca9f' />
-            <Text size='md'>Second packed data: <Text span c='#42ca9f' size='xs'>{secondPackedData as unknown as string}</Text> </Text>
+            <Text size='md'>Second packed data: <Text span c='#42ca9f' size='xs'>{String(secondPackedData)}</Text> </Text>
             <Divider size='md' c='#42ca9f' />
             <Text size='md'>License type chosen: <Text span c='#42ca9f' size='xs'>{licenseType}</Text> </Text>
             <Divider size='md' c='#42ca9f' />
