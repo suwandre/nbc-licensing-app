@@ -38,7 +38,7 @@ export const SignApplicationStep = ({
     return (
         <LicenseApplicationStepsBox 
           marginTop={20}
-          style={{ border: hasSignature ? '2px solid #42ca9f' : '2px solid white' }}
+          style={{ border: hasSignature || signMessageIsSuccess ? '2px solid #42ca9f' : '2px solid white' }}
         >
           <Flex
             direction="row"
@@ -49,9 +49,9 @@ export const SignApplicationStep = ({
             })}
           >
             <Flex direction="row" align="center">
-              <IconWallet size={25} color={hasSignature ? '#42ca9f' : 'white'} />
+              <IconWallet size={25} color={hasSignature || signMessageIsSuccess ? '#42ca9f' : 'white'} />
               <Text
-                color={hasSignature ? "#42ca9f" : "white"}
+                color={hasSignature || signMessageIsSuccess ? "#42ca9f" : "white"}
                 sx={(theme) => ({
                   margin: "10px 10px 10px 15px",
                   fontSize: 16,
@@ -80,7 +80,7 @@ export const SignApplicationStep = ({
                 </Badge>
               </Tooltip>
             </Flex>
-            {signature !== '' ? (
+            {hasSignature || signMessageIsSuccess ? (
               <IconCheck style={{ marginRight: 25 }} color='#42ca9f' />
             ) : (
               <Button

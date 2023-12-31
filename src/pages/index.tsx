@@ -82,22 +82,6 @@ export default function Home() {
 
   console.log("modifications: ", modifications);
 
-  // submit report config and call
-  const reportConfig = useDynamicPrepareContractWrite(
-    "submitReport",
-    sessionAddress,
-    [sessionAddress, applicationHash, "https://url.com"],
-    undefined
-  );
-
-  const {
-    data: reportData,
-    error: reportError,
-    isLoading: reportIsLoading,
-    isSuccess: reportIsSuccess,
-    write: reportWrite,
-  } = useContractWrite(reportConfig);
-
   // pay royalty config and call
   const payRoyaltyConfig = useDynamicPrepareContractWrite(
     "payRoyalty",
@@ -281,7 +265,10 @@ export default function Home() {
                 sessionAddress={sessionAddress}
                 applicationHash={applicationHash}
               />
-              <SubmitReportStep />
+              <SubmitReportStep 
+                sessionAddress={sessionAddress}
+                applicationHash={applicationHash}
+              />
               <ApproveReportStep />
               <PayRoyaltyStep />
               {/* <Button

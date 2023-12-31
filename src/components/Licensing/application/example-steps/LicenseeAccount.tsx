@@ -66,7 +66,7 @@ export const LicenseeAccountStep = ({
   return (
     <LicenseApplicationStepsBox
       marginTop={20}
-      style={{ border: hasAccount ? "2px solid #42ca9f" : "2px solid white" }}
+      style={{ border: hasAccount || registerAccountIsSuccess ? "2px solid #42ca9f" : "2px solid white" }}
     >
       <Flex
         direction="row"
@@ -77,9 +77,9 @@ export const LicenseeAccountStep = ({
         })}
       >
         <Flex direction="row" align="center">
-          <IconRegistered size={25} color={hasAccount ? "#42ca9f" : "white"} />
+          <IconRegistered size={25} color={hasAccount || registerAccountIsSuccess ? "#42ca9f" : "white"} />
           <Text
-            color={hasAccount ? "#42ca9f" : "white"}
+            color={hasAccount || registerAccountIsSuccess ? "#42ca9f" : "white"}
             sx={(theme) => ({
               margin: "10px 10px 10px 15px",
               fontSize: 16,
@@ -107,7 +107,7 @@ export const LicenseeAccountStep = ({
             </Badge>
           </Tooltip>
         </Flex>
-        {registerAccountIsSuccess || hasAccount ? (
+        {hasAccount || registerAccountIsSuccess ? (
           <IconCheck style={{ marginRight: 25 }} color="#42ca9f" />
         ) : (
           <Button

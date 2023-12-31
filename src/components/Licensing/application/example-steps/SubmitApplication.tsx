@@ -88,7 +88,7 @@ export const SubmitApplicationStep = ({
   return (
     <LicenseApplicationStepsBox
       marginTop={20}
-      style={{ border: submitted ? "2px solid #42ca9f" : "2px solid white" }}
+      style={{ border: submitted || submitApplicationIsSuccess ? "2px solid #42ca9f" : "2px solid white" }}
     >
       <Flex
         direction="row"
@@ -99,9 +99,9 @@ export const SubmitApplicationStep = ({
         })}
       >
         <Flex direction="row" align="center">
-          <IconWallet size={25} color={submitted ? "#42ca9f" : "white"} />
+          <IconWallet size={25} color={submitted || submitApplicationIsSuccess ? "#42ca9f" : "white"} />
           <Text
-            color={submitted ? "#42ca9f" : "white"}
+            color={submitted || submitApplicationIsSuccess ? "#42ca9f" : "white"}
             sx={(theme) => ({
               margin: "10px 10px 10px 15px",
               fontSize: 16,
@@ -129,7 +129,7 @@ export const SubmitApplicationStep = ({
             </Badge>
           </Tooltip>
         </Flex>
-        {submitted ? (
+        {submitted || submitApplicationIsSuccess ? (
           <IconCheck style={{ marginRight: 25 }} color="#42ca9f" />
         ) : (
           <Button
