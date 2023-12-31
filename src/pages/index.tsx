@@ -70,9 +70,9 @@ export default function Home() {
   const [applicationHash, setApplicationHash] = useState<string>("");
   const [signature, setSignature] = useState<string>("");
   const [licenseFee, setLicenseFee] = useState<string>("");
-  const [licenseType, setLicenseType] = useState<string>('Asset Creation');
+  const [licenseType, setLicenseType] = useState<string>("Asset Creation");
 
-  console.log('signature: ', signature);
+  console.log("signature: ", signature);
 
   // session address MAY differ than `accountAddress` from `useAccount()`; session address is to be used for all purposes.
   const sessionAddress = sessionData?.user?.address;
@@ -158,20 +158,26 @@ export default function Home() {
     };
 
     if (
-      sessionAddress && 
-      licenseHash && 
-      firstPackedData && 
+      sessionAddress &&
+      licenseHash &&
+      firstPackedData &&
       secondPackedData &&
       modifications
     ) {
       getApplicationHash();
     }
-  }, [sessionAddress, licenseHash, firstPackedData, secondPackedData, modifications]);
+  }, [
+    sessionAddress,
+    licenseHash,
+    firstPackedData,
+    secondPackedData,
+    modifications,
+  ]);
 
   return (
     <>
       <Layout pageTitle="Licensing">
-        <Flex direction="column" miw="100%" align="center" justify='center'>
+        <Flex direction="column" miw="100%" align="center" justify="center">
           <Text size={55}>LICENSING PROCESS EXAMPLE</Text>
           <Flex
             direction="column"
@@ -201,39 +207,46 @@ export default function Home() {
               })}
             >
               <b>
-                This example process interacts with the smart contract. For
-                non-technical users, please refrain from refreshing this website
-                when going through the example process to ensure a seamless
-                tryout.
+                This example process interacts with the{" "}
+                <a
+                  href={`https://testnet.bscscan.com/address/0x45eb0bCa5e5dDA84DF9549053A8cC3407E77D1BE`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#42ca9f", fontSize: 18 }}
+                >
+                  SMART CONTRACT.
+                </a>
                 <br />
-                <br />
-                The tooltip on each step provides a brief description of what that respective step does, but not fully.
-                <br />
-                It is recommended to thoroughly read the documentation of the entire process in detail HERE.
+                It is highly recommended to read through the
+                documentation for each step{" "}
+                <a
+                  href={`https://testnet.bscscan.com/address/0x45eb0bCa5e5dDA84DF9549053A8cC3407E77D1BE`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#42ca9f", fontSize: 18 }}
+                >
+                  HERE.
+                </a>
               </b>
             </Text>
           </Flex>
-          <Flex direction="row" miw='90%' justify='space-around'>
-            <Flex direction="column" miw="50%" justify='center'>
-              <ConnectWalletStep 
+          <Flex direction="row" miw="90%" justify="space-around">
+            <Flex direction="column" miw="50%" justify="center">
+              <ConnectWalletStep
                 walletConnected={!!sessionData?.user?.address}
               />
-              <LicenseeAccountStep 
-                sessionData={sessionData}
-              />
-              <ApproveAccountStep 
-                sessionData={sessionData}
-              />
-              <ChooseLicenseStep 
+              <LicenseeAccountStep sessionData={sessionData} />
+              <ApproveAccountStep sessionData={sessionData} />
+              <ChooseLicenseStep
                 licenseType={licenseType}
                 setLicenseType={setLicenseType}
               />
-              <SignApplicationStep 
+              <SignApplicationStep
                 applicationHash={applicationHash}
                 signature={signature}
                 setSignature={setSignature}
               />
-              <SubmitApplicationStep 
+              <SubmitApplicationStep
                 sessionAddress={sessionData?.user?.address}
                 licenseHash={licenseHash}
                 firstPackedData={firstPackedData}
@@ -242,37 +255,40 @@ export default function Home() {
                 modifications={modifications}
                 applicationHash={applicationHash}
               />
-              <PayFeeStep 
+              <PayFeeStep
                 sessionAddress={sessionAddress}
                 applicationHash={applicationHash}
               />
-              <ApproveApplicationStep 
+              <ApproveApplicationStep
                 sessionAddress={sessionAddress}
                 applicationHash={applicationHash}
               />
-              <SubmitReportStep 
+              <SubmitReportStep
                 sessionAddress={sessionAddress}
                 applicationHash={applicationHash}
               />
-              <ApproveReportStep 
+              <ApproveReportStep
                 sessionAddress={sessionAddress}
                 applicationHash={applicationHash}
               />
-              <PayRoyaltyStep 
+              <PayRoyaltyStep
                 sessionAddress={sessionAddress}
                 applicationHash={applicationHash}
               />
             </Flex>
-            <StepsDataBox 
-              walletAddress={sessionAddress as string ?? 'N/A'}
+            <StepsDataBox
+              walletAddress={(sessionAddress as string) ?? "N/A"}
               firstPackedData={firstPackedData}
               secondPackedData={secondPackedData}
               licenseType={licenseType}
               applicationHash={applicationHash}
               signature={signature}
-              licenseFee={`${ethers.utils.formatEther(BigInt("30000000000000000"))} tBNB`}
-              royaltyFee={`${ethers.utils.formatEther(BigInt("30000000000000000"))} tBNB`}
-              
+              licenseFee={`${ethers.utils.formatEther(
+                BigInt("30000000000000000")
+              )} tBNB`}
+              royaltyFee={`${ethers.utils.formatEther(
+                BigInt("30000000000000000")
+              )} tBNB`}
             />
           </Flex>
           {/* <Flex direction="column">
