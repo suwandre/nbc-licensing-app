@@ -75,10 +75,26 @@ export const StepsDataBox = ({
       <Divider size="md" c="#42ca9f" />
       <Text size="md">
         Signature from app. hash:{" "}
+        <span
+          style={{
+            maxWidth: "100%", // Adjust as needed
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            display: "inline-block",
+          }}
+        >
+          <Text span c="#42ca9f" size="xs">
+            {signature}
+          </Text>
+        </span>
+      </Text>
+      {/* <Text size="md">
+        Signature from app. hash:{" "}
         <Text span c="#42ca9f" size="xs">
           {signature}
         </Text>{" "}
-      </Text>
+      </Text> */}
       <Divider size="md" c="#42ca9f" />
       <Text size="md">
         License fee:{" "}
@@ -95,14 +111,16 @@ export const StepsDataBox = ({
       </Text>
       <Divider size="md" c="#42ca9f" />
       <Text size="md">
-        Contract activity:{" "} 
+        Your contract activity:{" "}
         <a
-          href="https://https://testnet.bscscan.com/address/0x45eb0bca5e5dda84df9549053a8cc3407e77d1be"
+          href={`https://testnet.bscscan.com/address/${walletAddress}`}
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: "#42ca9f", fontSize: "small" }}
         >
-          <Text span underline size='lg'>View Block Explorer (Testnet BSCSCAN)</Text>
+          <Text span underline size="lg">
+            View Block Explorer (Testnet BSCSCAN)
+          </Text>
         </a>
       </Text>
     </Flex>
