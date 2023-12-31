@@ -269,7 +269,10 @@ export default function Home() {
                 sessionAddress={sessionAddress}
                 applicationHash={applicationHash}
               />
-              <ApproveReportStep />
+              <ApproveReportStep 
+                sessionAddress={sessionAddress}
+                applicationHash={applicationHash}
+              />
               <PayRoyaltyStep />
               {/* <Button
               sx={(theme) => ({

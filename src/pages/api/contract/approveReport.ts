@@ -7,11 +7,9 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
-    console.log('running approveAccount');
-
     if (req.method === 'POST') {
         try {
-            const { licenseeAddress } = req.body;
+            const { licenseeAddress, applicationHash } = req.body;
 
             const ADMIN_PVT_KEY = process.env.ADMIN_WALLET_PVT_KEY ?? '';
             const provider = new ethers.providers.JsonRpcProvider(
@@ -25,9 +23,26 @@ export default async function handler(
 
             const nonce = await provider.getTransactionCount(wallet.address, 'latest');
 
-            const rawTx = await contract.populateTransaction.approveAccounts([licenseeAddress]);
+            const rawTx = await contract.populateTransaction.approveReport(
+                licenseeAddress,
+                applicationHash,
+                0,
+                // deadline is 1 second from now
+                Math.floor((new Date().getTime() / 1000)) + 1,
+                // royalty fee
+                BigInt('30000000000000000')
+            )
 
-            const estimatedGasLimit = await contract.estimateGas.approveAccounts([licenseeAddress]);
+            const estimatedGasLimit = await contract.estimateGas.approveReport(
+                licenseeAddress,
+                applicationHash,
+                0,
+                // deadline is 1 second from now
+                Math.floor((new Date().getTime() / 1000)) + 1,
+                // royalty fee
+                BigInt('30000000000000000')
+            );
+
             const gasLimit = estimatedGasLimit.add(ethers.utils.parseUnits('100000', 'wei'));
 
             const gasPrice = await provider.getGasPrice();
@@ -49,7 +64,7 @@ export default async function handler(
 
             res.status(200).json({ success: true, data: receipt });
         } catch (e: any) {
-            console.log('error approving account: ', e.message);
+            console.log('error approving report: ', e.message);
             res.status(500).json({ success: false, error: e.message });
         }
     } else {

@@ -29,7 +29,7 @@ export default async function handler(
 
             const rawTx = await contract.populateTransaction.approveApplication(licenseeAddress, applicationHash);
 
-            const estimatedGasLimit = await contract.estimateGas.approveAccounts([licenseeAddress]);
+            const estimatedGasLimit = await contract.estimateGas.approveApplication(licenseeAddress, applicationHash);
             const gasLimit = estimatedGasLimit.add(ethers.utils.parseUnits('100000', 'wei'));
 
             const gasPrice = await provider.getGasPrice();
