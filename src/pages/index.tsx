@@ -57,6 +57,7 @@ import { SubmitReportStep } from "@/components/Licensing/application/example-ste
 import { ApproveReportStep } from "@/components/Licensing/application/example-steps/ApproveReport";
 import { PayRoyaltyStep } from "@/components/Licensing/application/example-steps/PayRoyalty";
 import { StepsDataBox } from "@/components/Licensing/application/steps-data/StepsDataBox";
+import { ethers } from "ethers";
 
 export default function Home() {
   const { address: accountAddress } = useAccount();
@@ -81,22 +82,6 @@ export default function Home() {
   const modifications = toHex("None");
 
   console.log("modifications: ", modifications);
-
-  // pay royalty config and call
-  const payRoyaltyConfig = useDynamicPrepareContractWrite(
-    "payRoyalty",
-    sessionAddress,
-    [applicationHash, BigInt(0), BigInt("30000000000000000")],
-    BigInt("30000000000000000")
-  );
-
-  const {
-    data: payRoyaltyData,
-    error: payRoyaltyError,
-    isLoading: payRoyaltyIsLoading,
-    isSuccess: payRoyaltyIsSuccess,
-    write: payRoyaltyWrite,
-  } = useContractWrite(payRoyaltyConfig);
 
   const { data: licenseFeeData, error: licenseFeeError } =
     useDynamicContractRead("getLicenseFee", sessionAddress, [
@@ -142,14 +127,14 @@ export default function Home() {
       setSecondPackedData(data[1]);
     };
 
-    const callSetLicenseFee = async () => {
-      console.log("license fee: ", licenseFee);
-      setLicenseFee(String(Number(licenseFeeData)));
-    };
+    // const callSetLicenseFee = async () => {
+    //   console.log("license fee: ", licenseFee);
+    //   setLicenseFee(String(Number(licenseFeeData)));
+    // };
 
     getAccount();
     getPackedData();
-    callSetLicenseFee();
+    // callSetLicenseFee();
   }, [sessionAddress]);
 
   useEffect(() => {
@@ -273,116 +258,10 @@ export default function Home() {
                 sessionAddress={sessionAddress}
                 applicationHash={applicationHash}
               />
-              <PayRoyaltyStep />
-              {/* <Button
-              sx={(theme) => ({
-                backgroundColor: "#42ca9f",
-                transitionDuration: "200ms",
-                ":hover": {
-                  transform: "scale(1.01) translate(1px, -3px)",
-                  backgroundColor: "#42ca9f",
-                },
-
-                ":active": {
-                  transform: "translateY(2px)",
-                },
-              })}
-              disabled={!registerAccountWrite || registerAccountIsLoading}
-              onClick={() => registerAccountWrite?.()}
-            >
-              Create Account
-            </Button>
-            <Button
-              sx={(theme) => ({
-                backgroundColor: "#42ca9f",
-                transitionDuration: "200ms",
-                ":hover": {
-                  transform: "scale(1.01) translate(1px, -3px)",
-                  backgroundColor: "#42ca9f",
-                },
-
-                ":active": {
-                  transform: "translateY(2px)",
-                },
-              })}
-              // disabled={signMessageIsLoading}
-              // onClick={() => signMessage()}
-              onClick={() => signFunction()}
-            >
-              Sign Application Hash Message
-            </Button>
-            <Button
-              sx={(theme) => ({
-                backgroundColor: "#42ca9f",
-                transitionDuration: "200ms",
-                ":hover": {
-                  transform: "scale(1.01) translate(1px, -3px)",
-                  backgroundColor: "#42ca9f",
-                },
-
-                ":active": {
-                  transform: "translateY(2px)",
-                },
-              })}
-              disabled={!submitApplicationWrite || submitApplicationIsLoading}
-              onClick={() => submitApplicationWrite?.()}
-            >
-              Submit Application
-            </Button>
-            <Button
-              sx={(theme) => ({
-                backgroundColor: "#42ca9f",
-                transitionDuration: "200ms",
-                ":hover": {
-                  transform: "scale(1.01) translate(1px, -3px)",
-                  backgroundColor: "#42ca9f",
-                },
-
-                ":active": {
-                  transform: "translateY(2px)",
-                },
-              })}
-              disabled={!payLicenseFeeWrite || payLicenseFeeIsLoading}
-              onClick={() => payLicenseFeeWrite?.()}
-            >
-              Pay License Fee
-            </Button>
-            <Button
-              sx={(theme) => ({
-                backgroundColor: "#42ca9f",
-                transitionDuration: "200ms",
-                ":hover": {
-                  transform: "scale(1.01) translate(1px, -3px)",
-                  backgroundColor: "#42ca9f",
-                },
-
-                ":active": {
-                  transform: "translateY(2px)",
-                },
-              })}
-              disabled={!reportWrite || reportIsLoading}
-              onClick={() => reportWrite?.()}
-            >
-              Submit Report
-            </Button>
-            <Button
-              sx={(theme) => ({
-                backgroundColor: "#42ca9f",
-                transitionDuration: "200ms",
-                ":hover": {
-                  transform: "scale(1.01) translate(1px, -3px)",
-                  backgroundColor: "#42ca9f",
-                },
-
-                ":active": {
-                  transform: "translateY(2px)",
-                },
-              })}
-              disabled={!payRoyaltyWrite || payRoyaltyIsLoading}
-              onClick={() => payRoyaltyWrite?.()}
-            >
-              Pay Royalty Fee
-            </Button> */}
+              <PayRoyaltyStep 
+                sessionAddress={sessionAddress}
+                applicationHash={applicationHash}
+              />
             </Flex>
             <StepsDataBox 
               walletAddress={sessionAddress as string ?? 'N/A'}
@@ -391,7 +270,9 @@ export default function Home() {
               licenseType={licenseType}
               applicationHash={applicationHash}
               signature={signature}
-              licenseFee={licenseFee}
+              licenseFee={`${ethers.utils.formatEther(BigInt("30000000000000000"))} tBNB`}
+              royaltyFee={`${ethers.utils.formatEther(BigInt("30000000000000000"))} tBNB`}
+              
             />
           </Flex>
           {/* <Flex direction="column">

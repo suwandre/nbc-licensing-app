@@ -1,10 +1,66 @@
 import { Badge, Button, Flex, Text, Tooltip } from "@mantine/core";
 import { LicenseApplicationStepsBox } from "../StepsBox";
-import { IconWallet } from "@tabler/icons";
+import { IconCheck, IconWallet } from "@tabler/icons";
+import { dynamicContractRead, useDynamicPrepareContractWrite } from "@/utils/contractActions";
+import { useContractWrite } from "wagmi";
+import { Account } from "viem";
+import { useEffect, useState } from "react";
 
-export const PayRoyaltyStep = () => {
+type PayRoyaltyStepProps = {
+  sessionAddress: `0x${string}` | Account | undefined;
+  applicationHash: string;
+}
+
+export const PayRoyaltyStep = ({
+  sessionAddress,
+  applicationHash,
+}: PayRoyaltyStepProps) => {
+  const [paid, setPaid] = useState(false);
+
+  // pay royalty config and call
+  const payRoyaltyConfig = useDynamicPrepareContractWrite(
+    "payRoyalty",
+    sessionAddress,
+    [applicationHash, BigInt(0), BigInt("30000000000000000")],
+    BigInt("30000000000000000")
+  );
+
+  const {
+    data: payRoyaltyData,
+    error: payRoyaltyError,
+    isLoading: payRoyaltyIsLoading,
+    isSuccess: payRoyaltyIsSuccess,
+    write: payRoyaltyWrite,
+  } = useContractWrite(payRoyaltyConfig);
+
+  useEffect(() => {
+    const checkPaid = async () => {
+      const data = (await dynamicContractRead(
+        'getRoyaltyPaymentTimestamp',
+        sessionAddress,
+        [
+          sessionAddress,
+          applicationHash,
+          // we get the 0th index since we only will submit/have submitted one report
+          0
+        ]
+      )) as BigInt;
+
+      if (data !== BigInt(0)) {
+        setPaid(true);
+      } else {
+        setPaid(false);
+      }
+    }
+
+    checkPaid();
+  }, [sessionAddress, applicationHash])
+
     return (
-        <LicenseApplicationStepsBox marginTop={20}>
+        <LicenseApplicationStepsBox 
+          marginTop={20}
+          style={{ border: paid || payRoyaltyIsSuccess ? "2px solid #42ca9f" : "2px solid white" }}
+        >
           <Flex
             direction="row"
             align="center"
@@ -14,9 +70,9 @@ export const PayRoyaltyStep = () => {
             })}
           >
             <Flex direction="row" align="center">
-              <IconWallet size={25} />
+              <IconWallet size={25} color={paid || payRoyaltyIsSuccess ? "#42ca9f" : "white"} />
               <Text
-                color={"white"}
+                color={paid || payRoyaltyIsSuccess ? "#42ca9f" : "white"}
                 sx={(theme) => ({
                   margin: "10px 10px 10px 15px",
                   fontSize: 16,
@@ -44,7 +100,10 @@ export const PayRoyaltyStep = () => {
                 </Badge>
               </Tooltip>
             </Flex>
-            <Button
+            {paid || payRoyaltyIsSuccess ? (
+              <IconCheck style={{ marginRight: 25 }} color="#42ca9f" />
+            ) : (
+              <Button
               sx={(theme) => ({
                 backgroundColor: "#42ca9f",
                 marginRight: 25,
@@ -58,9 +117,13 @@ export const PayRoyaltyStep = () => {
                   fontSize: 10,
                 },
               })}
+              disabled={!payRoyaltyWrite || payRoyaltyIsLoading}
+              onClick={() => payRoyaltyWrite?.()}
+              loading={payRoyaltyIsLoading}
             >
               Pay
             </Button>
+            )}
           </Flex>
         </LicenseApplicationStepsBox>
       );
