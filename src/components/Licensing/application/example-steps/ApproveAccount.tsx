@@ -132,10 +132,6 @@ export const ApproveAccountStep = ({sessionData}: ApproveAccountStepProps) => {
           })}
           onClick={approveAccount}
           disabled={approved || isLoading}
-          onError={() => {
-            setError('Error approving account');
-            console.error(error);
-          }}
           loading={isLoading}
         >
           Approve

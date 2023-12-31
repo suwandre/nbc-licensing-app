@@ -277,7 +277,10 @@ export default function Home() {
                 sessionAddress={sessionAddress}
                 applicationHash={applicationHash}
               />
-              <ApproveApplicationStep />
+              <ApproveApplicationStep 
+                sessionAddress={sessionAddress}
+                applicationHash={applicationHash}
+              />
               <SubmitReportStep />
               <ApproveReportStep />
               <PayRoyaltyStep />

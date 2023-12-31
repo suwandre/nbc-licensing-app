@@ -49,7 +49,7 @@ export const PayFeeStep = ({
 
   useEffect(() => {
     checkPaid();
-  }, [sessionAddress]);
+  }, [sessionAddress, applicationHash]);
 
   return (
     <LicenseApplicationStepsBox 

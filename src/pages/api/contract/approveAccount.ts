@@ -1,11 +1,7 @@
 import { ethers } from 'ethers';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import LicenseABI from '../../../abis/License.json';
-type Data = {
-    success: boolean;
-    data?: any;
-    error?: string;
-}
+import { Data } from '@/utils/apiData';
 
 export default async function handler(
     req: NextApiRequest,
@@ -26,8 +22,6 @@ export default async function handler(
         const contractABI = LicenseABI;
         const contractAddress = process.env.LICENSE_CONTRACT_ADDRESS ?? '';
         const contract = new ethers.Contract(contractAddress, contractABI, wallet);
-
-        console.log('retrieved all approveAccount params');
 
         const nonce = await provider.getTransactionCount(wallet.address, 'latest');
 
