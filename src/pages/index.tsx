@@ -227,6 +227,10 @@ export default function Home() {
                 >
                   HERE.
                 </a>
+                <br />
+                <br />
+                NOTE: Step 5 (Sign application hash) will be undone when the page is refreshed. This is normal behavior; please resign the message again via your wallet provider.
+                Signing messages are free and do not require any gas.
               </b>
             </Text>
           </Flex>
