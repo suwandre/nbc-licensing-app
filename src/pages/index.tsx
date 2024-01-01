@@ -207,14 +207,14 @@ export default function Home() {
               })}
             >
               <b>
-                This example process interacts with the{" "}
+                This example process interacts with{" "}
                 <a
                   href={`https://testnet.bscscan.com/address/0x45eb0bCa5e5dDA84DF9549053A8cC3407E77D1BE`}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ color: "#42ca9f", fontSize: 18 }}
                 >
-                  SMART CONTRACT.
+                  THIS SMART CONTRACT.
                 </a>
                 <br />
                 It is highly recommended to read through the

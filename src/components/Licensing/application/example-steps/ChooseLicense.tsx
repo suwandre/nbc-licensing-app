@@ -1,6 +1,6 @@
 import { Badge, Button, Flex, NativeSelect, Text, Tooltip } from "@mantine/core";
 import { LicenseApplicationStepsBox } from "../StepsBox";
-import { IconWallet } from "@tabler/icons";
+import { IconLicense, IconWallet } from "@tabler/icons";
 
 type ChooseLicenseStepProps = {
     licenseType: string,
@@ -25,7 +25,7 @@ export const ChooseLicenseStep = ({
             })}
           >
             <Flex direction="row" align="center">
-              <IconWallet size={25} color='#42ca9f' />
+              <IconLicense size={25} color='#42ca9f' />
               <Text
                 color={"#42ca9f"}
                 sx={(theme) => ({

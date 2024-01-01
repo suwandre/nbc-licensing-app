@@ -1,6 +1,6 @@
 import { Badge, Button, Flex, Text, Tooltip } from "@mantine/core";
 import { LicenseApplicationStepsBox } from "../StepsBox";
-import { IconCheck, IconWallet } from "@tabler/icons";
+import { IconCheck, IconSignature, IconWallet } from "@tabler/icons";
 import { useSignMessage } from "@/utils/signMessage";
 import { useEffect } from "react";
 
@@ -49,7 +49,7 @@ export const SignApplicationStep = ({
             })}
           >
             <Flex direction="row" align="center">
-              <IconWallet size={25} color={hasSignature || signMessageIsSuccess ? '#42ca9f' : 'white'} />
+              <IconSignature size={25} color={hasSignature || signMessageIsSuccess ? '#42ca9f' : 'white'} />
               <Text
                 color={hasSignature || signMessageIsSuccess ? "#42ca9f" : "white"}
                 sx={(theme) => ({

@@ -1,9 +1,9 @@
 import { Badge, Button, Flex, Text, Tooltip } from '@mantine/core';
 import { LicenseApplicationStepsBox } from '../StepsBox';
-import { IconCheck, IconWallet } from '@tabler/icons';
+import { IconCheck, IconUserCheck, IconWallet } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import { CustomSessionType } from '@/utils/session';
-import { dynamicContractRead, useDynamicContractRead } from '@/utils/contractActions';
+import { dynamicContractRead } from '@/utils/contractActions';
 import { LicenseeAccountData } from '@/components/types/LicenseeAcount';
 
 type ApproveAccountStepProps = {
@@ -83,7 +83,7 @@ export const ApproveAccountStep = ({sessionData}: ApproveAccountStepProps) => {
         })}
       >
         <Flex direction='row' align='center'>
-          <IconWallet size={25} color={approved ? '#42ca9f' : 'white'} />
+          <IconUserCheck size={25} color={approved ? '#42ca9f' : 'white'} />
           <Text
             color={approved ? '#42ca9f' : 'white'}
             sx={(theme) => ({

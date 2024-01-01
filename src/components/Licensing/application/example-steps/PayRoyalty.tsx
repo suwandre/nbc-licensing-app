@@ -1,6 +1,6 @@
 import { Badge, Button, Flex, Text, Tooltip } from "@mantine/core";
 import { LicenseApplicationStepsBox } from "../StepsBox";
-import { IconCheck, IconWallet } from "@tabler/icons";
+import { IconCheck, IconCurrencyDollar, IconWallet } from "@tabler/icons";
 import { dynamicContractRead, useDynamicPrepareContractWrite } from "@/utils/contractActions";
 import { useContractWrite } from "wagmi";
 import { Account } from "viem";
@@ -70,7 +70,7 @@ export const PayRoyaltyStep = ({
             })}
           >
             <Flex direction="row" align="center">
-              <IconWallet size={25} color={paid || payRoyaltyIsSuccess ? "#42ca9f" : "white"} />
+              <IconCurrencyDollar size={25} color={paid || payRoyaltyIsSuccess ? "#42ca9f" : "white"} />
               <Text
                 color={paid || payRoyaltyIsSuccess ? "#42ca9f" : "white"}
                 sx={(theme) => ({

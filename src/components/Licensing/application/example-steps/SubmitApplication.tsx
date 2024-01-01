@@ -1,6 +1,6 @@
 import { Badge, Button, Flex, Text, Tooltip } from "@mantine/core";
 import { LicenseApplicationStepsBox } from "../StepsBox";
-import { IconCheck, IconWallet } from "@tabler/icons";
+import { IconArrowRightRhombus, IconCheck, IconWallet } from "@tabler/icons";
 import { useContractWrite } from "wagmi";
 import {
   dynamicContractRead,
@@ -99,7 +99,7 @@ export const SubmitApplicationStep = ({
         })}
       >
         <Flex direction="row" align="center">
-          <IconWallet size={25} color={submitted || submitApplicationIsSuccess ? "#42ca9f" : "white"} />
+          <IconArrowRightRhombus size={25} color={submitted || submitApplicationIsSuccess ? "#42ca9f" : "white"} />
           <Text
             color={submitted || submitApplicationIsSuccess ? "#42ca9f" : "white"}
             sx={(theme) => ({

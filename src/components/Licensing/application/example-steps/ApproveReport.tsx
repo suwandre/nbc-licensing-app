@@ -1,6 +1,6 @@
 import { Badge, Button, Flex, Text, Tooltip } from "@mantine/core";
 import { LicenseApplicationStepsBox } from "../StepsBox";
-import { IconCheck, IconWallet } from "@tabler/icons";
+import { IconCheck, IconFileCheck, IconWallet } from "@tabler/icons";
 import { Account } from "viem";
 import { useEffect, useState } from "react";
 import { dynamicContractRead } from "@/utils/contractActions";
@@ -95,7 +95,7 @@ export const ApproveReportStep = ({
         })}
       >
         <Flex direction="row" align="center">
-          <IconWallet size={25} color={approved ? "#42ca9f" : "white"} />
+          <IconFileCheck size={25} color={approved ? "#42ca9f" : "white"} />
           <Text
             color={approved ? "#42ca9f" : "white"}
             sx={(theme) => ({
