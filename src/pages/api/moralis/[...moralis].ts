@@ -4,7 +4,7 @@ export default MoralisNextApi({
   apiKey: process.env.MORALIS_API_KEY ?? '',
   authentication: {
     domain: 'nbc-licensing-app.vercel.app',
-    uri: process.env.NEXTAUTH_URL ?? '',
+    uri: 'https://nbc-licensing-app.vercel.app',
     timeout: 120,
   },
 });
