@@ -70,7 +70,7 @@ export const ApproveReportStep = ({
         ]
       )) as BigInt;
 
-      if (data !== BigInt(0)) {
+      if (data !== BigInt(0) && data !== undefined) {
         setApproved(true);
       // temporary add since report sometimes is approved
       } else {

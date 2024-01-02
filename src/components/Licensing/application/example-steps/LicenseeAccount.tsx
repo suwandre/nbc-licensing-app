@@ -31,7 +31,7 @@ export const LicenseeAccountStep = ({
   );
 
   const registerAccountConfig = useDynamicPrepareContractWrite(
-    "registerAccount",
+    'registerAccount',
     sessionData?.user?.address,
     [convertToBytes],
     undefined

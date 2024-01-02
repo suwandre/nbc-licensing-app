@@ -46,7 +46,7 @@ export const PayRoyaltyStep = ({
         ]
       )) as BigInt;
 
-      if (data !== BigInt(0)) {
+      if (data !== BigInt(0) && data !== undefined) {
         setPaid(true);
       } else {
         setPaid(false);
