@@ -57,7 +57,7 @@ export const ChooseLicenseStep = ({
             </Flex>
             <NativeSelect 
               mr={25}
-              data={['Asset Creation', 'Asset Usage', 'Asset Modification']}
+              data={['Asset Creation', 'Existing Asset Usage', 'Asset Modification']}
               value={licenseType}
               onChange={(e: any) => setLicenseType(e.currentTarget.value)}
               defaultValue={'Asset Creation'}
