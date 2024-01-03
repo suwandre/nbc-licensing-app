@@ -54,7 +54,7 @@ export const PayFeeStep = ({
   return (
     <LicenseApplicationStepsBox 
       marginTop={20}
-      style={{ border: paid ? '2px solid #42ca9f' : '2px solid white' }}
+      style={{ border: paid || payLicenseFeeIsSuccess ? '2px solid #42ca9f' : '2px solid white' }}
     >
       <Flex
         direction="row"
@@ -65,9 +65,9 @@ export const PayFeeStep = ({
         })}
       >
         <Flex direction="row" align="center">
-          <IconCurrencyDollar size={25} color={paid ? '#42ca9f' : 'white'} />
+          <IconCurrencyDollar size={25} color={paid || payLicenseFeeIsSuccess ? '#42ca9f' : 'white'} />
           <Text
-            color={paid ? '#42ca9f' : 'white'}
+            color={paid || payLicenseFeeIsSuccess ? '#42ca9f' : 'white'}
             sx={(theme) => ({
               margin: "10px 10px 10px 15px",
               fontSize: 16,
@@ -95,7 +95,7 @@ export const PayFeeStep = ({
             </Badge>
           </Tooltip>
         </Flex>
-        {paid ? (
+        {paid || payLicenseFeeIsSuccess ? (
           <IconCheck style={{ marginRight: 25 }} color="#42ca9f" />
         ) : (
           <Button
